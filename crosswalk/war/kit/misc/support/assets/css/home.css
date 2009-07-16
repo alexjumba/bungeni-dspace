@@ -1,0 +1,79 @@
+#home-panel {
+    width: 932px;
+    height: 258px;
+    background: #fff url(../images/home/home.png) no-repeat;
+    position:relative;
+	margin-top:10px;
+}
+
+#bd {
+	
+}
+
+div.home-block {
+	background: transparent url(../images/med-box.png) no-repeat;
+	padding-top:11px;
+	width:450px;
+}
+div.home-block-inner {
+	background: transparent url(../images/med-box.png) no-repeat 0 bottom;
+	padding:5px 20px 20px;
+	font-size:12px;
+}
+div.home-block-inner h2 {
+	color:#1A5C9A;
+	font-size:18px;
+	margin:0 0 10px 0;
+}
+div.home-block-inner ul {
+	list-style-type:square;
+	margin-left:20px;
+	color: #789030;
+}
+div.home-block-inner ul li span {
+	color: #555;
+}
+img.learn-more {
+	float:right;
+	margin-right:10px;
+}
+img.shot {
+	float:right;
+	margin: 0 0 3px 10px;
+}
+
+#bd .left-column {
+	width:450px;
+	float:left;
+}
+#bd .right-column {
+	width:450px;
+	float:left;
+	margin-left:20px;
+}
+
+#bd .box {
+	padding:7px;
+}
+
+#bd .box h4 {
+	margin:0;
+}
+#bd .box .meta {
+	font-size:12px;
+}
+.post-icon {
+	width:120px;
+	height:90px;
+	float:left;
+	margin: 10px 8px 4px 0;
+}
+
+#bd h5 {
+	background-image: url(../images/home/shd.png);
+	padding-left:10px;
+}
+
+#home {
+	padding-top:15px;
+}

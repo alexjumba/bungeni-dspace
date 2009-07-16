@@ -1,0 +1,28 @@
+(function(){function F(J){for(var I=0;I<J.length;I++){opt=new Object();var H=/diggThis(Compact|Icon)?\.(gif|png)/i.exec(J[I].innerHTML);
+if(H&&H[1]){opt.d_skin=H[1].toLowerCase()}var H=/http:\/\/digg\.com\/submit\?(.*)?title=([^&]*)/i.exec(J[I].href);
+if(H&&H[2]){opt.d_title=unescape(H[2])}var H=/http:\/\/digg\.com\/submit\?(.*)?url=([^&]*)/i.exec(J[I].href);
+if(H&&H[2]){opt.d_url=unescape(H[2])}if(J[I].style.backgroundColor){opt.d_bgcolor=D(J[I].style.backgroundColor).toHex()
+}var H=/(news|image|video)?,?\s*([^\s]*)?/i.exec(J[I].rev);if(H&&H[1]){opt.d_media=H[1]}if(H&&H[2]){opt.d_topic=H[2]
+}var H=/\bexternal\b/i.exec(J[I].rel);if(H){opt.d_window="new"}var H=/<span[^>]*>([^<]*)<\/span>/i.exec(J[I].innerHTML);
+if(H&&H[1]){opt.d_bodytext=H[1]}if(opt.d_bodytext&&opt.d_bodytext.length>350){opt.d_bodytext=opt.d_bodytext.substring(0,350)
+}J[I].style.visibility="visible";J[I].style.display="block";var K=document.createElement("DIV");K.innerHTML=C(opt);
+J[I].parentNode.replaceChild(K.firstChild,J[I])}}function C(K){if(!K){K=new Object()}var I=escape(K.d_url?K.d_url:(typeof digg_url=="string")?digg_url:((typeof DIGG_URL=="string")?DIGG_URL:window.location.href)).replace(/\+/g,"%2b");
+var O=80,Q=52;var M=K.d_skin?"&s="+escape(K.d_skin):(typeof digg_skin=="string")?"&s="+escape(digg_skin):"";
+var L=K.d_title?"&t="+escape(K.d_title):(typeof digg_title=="string")?"&t="+escape(digg_title):"&t="+escape(document.title);
+var H=K.d_window?"&w="+escape(K.d_window):(typeof digg_window=="string")?"&w="+escape(digg_window):"";
+var P=K.d_bodytext?"&b="+escape(K.d_bodytext):(typeof digg_bodytext=="string")?"&b="+escape(digg_bodytext):"";
+var N=K.d_media?"&m="+escape(K.d_media):(typeof digg_media=="string")?"&m="+escape(digg_media):"";var R=K.d_topic?"&c="+escape(K.d_topic):(typeof digg_topic=="string")?"&c="+escape(digg_topic):"";
+var J=K.d_bgcolor?"&k="+escape(K.d_bgcolor):(typeof digg_bgcolor=="string")?"&k="+escape(digg_bgcolor):"";
+if(M=="&s=compact"){O=18;Q=120}else{if(M=="&s=icon"){O=16;Q=16}}return'<iframe src="http://digg.com/tools/diggthis.php?u='+I+M+L+H+P+N+R+J+"\" height='"+O+"' width='"+Q+"' frameborder='0' scrolling='no'></iframe>"
+}function D(K){var I=new Object();K=K.replace(/[ #]/g,"").toLowerCase();var L=[{re:/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,process:function(M){return[parseInt(M[1]),parseInt(M[2]),parseInt(M[3])]
+}},{re:/^(\w{2})(\w{2})(\w{2})$/,process:function(M){return[parseInt(M[1],16),parseInt(M[2],16),parseInt(M[3],16)]
+}},{re:/^(\w{1})(\w{1})(\w{1})$/,process:function(M){return[parseInt(M[1]+M[1],16),parseInt(M[2]+M[2],16),parseInt(M[3]+M[3],16)]
+}}];for(var H=0;H<L.length;H++){var J=L[H].re.exec(K);if(J){channels=L[H].process(J);I.r=parseInt(channels[0]);
+I.g=parseInt(channels[1]);I.b=parseInt(channels[2])}}I.r=(I.r<0||isNaN(I.r))?0:((I.r>255)?255:I.r);I.g=(I.g<0||isNaN(I.g))?0:((I.g>255)?255:I.g);
+I.b=(I.b<0||isNaN(I.b))?0:((I.b>255)?255:I.b);I.toRGB=function(){return"rgb("+I.r+", "+I.g+", "+I.b+")"
+};I.toHex=function(){var O=I.r.toString(16);var N=I.g.toString(16);var M=I.b.toString(16);if(O.length==1){O="0"+O
+}if(N.length==1){N="0"+N}if(M.length==1){M="0"+M}return"#"+O+N+M};I.toString=function(){return I.toHex()
+};I.fadeTo=function(N,M){I.r=I.r+Math.round((N.r-I.r)*M);I.g=I.g+Math.round((N.g-I.g)*M);I.b=I.b+Math.round((N.b-I.b)*M);
+return I.toHex()};return I}var G=[];var E=document.body.getElementsByTagName("A");for(var B=0;B<E.length;
+B++){if(/\bDiggThisButton\b/.test(E[B].className)){G.push(E[B])}}if(G.length){var A=window.onload;if(typeof window.onload!="function"){window.onload=function(){F(G)
+}}else{window.onload=function(){A();F(G)}}}else{document.write(C())}})();

@@ -1,0 +1,949 @@
+<html>
+<head>
+<!-- <script type="text/javascript" src="RowExpander.js"></script> -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<title>MASINDE PROJECT</title>
+	<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/style.css" />
+	<link rel="stylesheet" type="text/css" href="../kit/misc/support/deploy/dev/resources/css/core.css" />
+	<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/css/extjs.css" />	
+	<!-- <link rel="stylesheet" type="text/css" href="../kit/misc/support/resources/css/ext-all.css"/> -->
+	<link rel="stylesheet" type="text/css" href="../kit/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../kit/examples/desktop/css/desktop.css" />
+
+	<link rel="stylesheet" type="text/css" href="../kit/misc/Ext.ux.grid.RowActions.css" />
+	
+	<!-- <script type="text/javascript" src="../../assets/js/extjs.js"></script>	-->
+	<script type="text/javascript" src="../kit/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../kit/misc/support/adapter/jquery/jquery-1.3.1.min.js"></script>
+<!-- <script type="text/javascript" src="../../assets/js/wizard.js"></script> -->
+<!-- <script type="text/javascript" src="../../adapter/jquery/ext-jquery-adapter.js"></script> -->
+	<!-- ENDLIBS -->
+	<script type="text/javascript" src="../kit/ext-all.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/css/sview2.css" />
+<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/css/sview3.css" />
+
+<script type="text/javascript" src="../kit/misc/TabCloseMenu.js"></script>
+<script type="text/javascript" src="../kit/misc/RowExpander.js"></script>
+<script type="text/javascript" src="../kit/misc/HistoryClearableComboBox.js"></script>
+<script type="text/javascript" src="../kit/misc/SearchField.js"></script>
+<script type="text/javascript" src="../kit/misc/SmartCheckboxSelectionModel.js"></script>
+<script type="text/javascript" src="../kit/misc/grid.advanced.js"></script>
+<script type="text/javascript" src="../kit/misc/ColumnNodeUI.js"></script>
+<script type="text/javascript" src="../kit/misc/adv-vtypes2.js"></script>
+<script type="text/javascript" src="../kit/misc/Ext.ux.grid.RowActions.js"></script>
+<!-- <script type="text/javascript" src="../kit/misc/DateRangeField.js"></script> -->
+<script type="text/javascript" src="../DateRangeField.js"></script>
+<script type="text/javascript" src="../pPageSize.js"></script>
+	
+<script type="text/javascript" >
+	Ext.BLANK_IMAGE_URL = '../kit/resources/images/default/s.gif';
+</script>
+<style type="text/css">
+.imageview{
+    width: 64px;
+    height: 64px
+  }
+#sample-box-inner{
+    width: 100%;
+    height: auto;
+    border: 0px;
+}
+.icon-ob{
+    background-image: url('../images/disk.png');
+    height: 1em;
+}
+.task{
+	background-image: url(../images/so03226.png) !important;
+}
+
+body {
+color: #000000;
+font-color: #000000;
+}
+
+.x-grid3-row-alt {
+background-color: #dadada;
+}
+
+a[href$='.pdf'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/pdf.png) center left no-repeat;
+}
+a[href$='.ppt'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/ppt.png) center left no-repeat;
+}
+a[href$='.doc'], a[href$='.odt'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/word.png) center left no-repeat;
+}
+a[href$='.txt'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/txt.png) center left no-repeat;
+}
+a[href$='.zip'], a[href$='.tar.gz'], a[href$='.tar'], a[href$='.tar.bz2'], a[href$='.7z'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/zip.png) center left no-repeat;
+}
+.ux-grid3-row-action-cell .x-grid3-cell-inner {
+    padding: 1px 0 0 0;
+}
+.ux-grid3-row-action-cell .x-grid3-cell-inner div {
+    background-repeat:no-repeat;
+    width:16px;
+    height:16px;
+    cursor:pointer;
+}
+</style>
+
+<script type="text/javascript">
+//Ext.Msg.alert('Status', 'Just testing...');
+Ext.onReady(function(){
+
+
+Ext.QuickTips.init();
+	Ext.useShims = true;
+
+  // row expander
+    var expander = new Ext.grid.RowExpander({
+        tpl : new Ext.Template(
+'<div style="float:left;">',
+            '<img title="{title}" style="padding-right: 20px; width: 120px; height: 120px;" type="{url}" class="{collection}" src="../images/categories/{collection}.jpg" alt="{title}"/>',
+'</div><div style="/*float: left;*/ padding-left: 1em;">',
+            '<p><b>Title:</b> {title}</p><br>',
+            '<p><b>'+'description'+': '+':</b> {description}</p>',
+            '<p><b>Bitstreams [File(s)]:</b></p><br />{bitstreams}',
+'</div><br style="clear: both;"/>'
+        )
+    });
+
+ // custom column plugin example
+    /*var checkColumn = new Ext.grid.CheckColumn({
+       header: "Indoor?",
+       dataIndex: 'attendance',
+       width: 55
+    });*/
+    //var sm2 = new Ext.grid.CheckboxSelectionModel({singleSelect:false});
+    /*var sm2 = new Ext.grid.SmartCheckboxSelectionModel({
+    email: true,
+    excel:true,
+    dataIndex: 'attendance',
+header: ' ',
+disabled: true,
+    alwaysSelectOnCheck:false
+});*/
+var sm2 = new Ext.grid.SmartCheckboxSelectionModel({
+    email: true,
+    excel:true,
+    alwaysSelectOnCheck:false
+});
+
+				var media_store = new Ext.data.JsonStore({
+        //url: 'index.do',
+    	//autoLoad: true,
+        root: 'searchResults',
+        baseParams: {
+            method:   'post',
+            type: 'dspace',
+            ////keywords: '',//search_term,
+            ////start: 0,
+    //start: 0,
+    //loc: '',
+            ////pagesize: 20,
+            //page: 0,
+            //rows: 20,
+            //start: 0,
+//    		sidx: 'id',
+//            sord: 'DESC'         
+        },
+        /*params:{
+    		start: 0
+        },*/
+        paramNames:
+        {
+            start: "start",//"page",    // The parameter name which specifies the start row
+            limit: "rows",    // The parameter name which specifies number of rows to return
+            sort: "sidx",      // The parameter name which specifies the column to sort on
+            //query1: null,query2: null, query3: null, query4: null, query5: null, query6: null, query7: null, loc: null, 
+            dir: "sord"		   // The parameter name which specifies the sort direction                
+        },
+        totalProperty: 'maxResults',
+        idProperty: 'url',
+        //id: 'url',
+        fields: [
+            {name: 'id', mapping: 'url'},
+            {name: 'issue_date', type: 'date', mapping: 'issue_date', dateFormat: 'Y/m/d'/*'timestamp'*/},
+            {name: 'author', type: 'string'},
+            {name: 'title', type: 'string'},
+            {name: 'url', type: 'string'},
+            {name: 'bitstreams', type: 'string'},
+            {name: 'collection', type: 'string'},
+            {name: 'description', type: 'string', mapping: 'details'}
+        ],
+      //init order by status
+        sortInfo:{field: 'id', direction: "DESC"},
+        remoteSort: true,
+        proxy: new Ext.data.HttpProxy({
+            method: 'POST',
+            url: '../index.do'
+        }),
+        listeners: {
+        	load: {
+	            fn: function() {
+	    			//////console.log(this);
+	    			//////console.log(this.reader.jsonData.searchTerms);
+	    			//////console.log(this);
+	    			$("#resultsheader").html(this.reader.jsonData.searchTerms+' ');
+	
+	    			//console.log(Ext.getCmp('date_issue').getValue()=='');
+	    			
+//console.log(Ext.getCmp('date_issue').getValue(),Ext.getCmp('date_issue'), Ext.getCmp('date_issue').getValue().begin);
+	    			$("#dateheader").html(Ext.getCmp('date_issue').getValue().begin == null?'':'DATE: '+Ext.getCmp('date_issue').getValue().begin +' ');
+	    			$("#authorheader").html(Ext.getCmp('author_field').getValue()==''?'':'AUTHOR: '+Ext.getCmp('author_field').getValue()+' ');
+	    			$("#titleheader").html(Ext.getCmp('title_field').getValue()==''?'':'TITLE: '+Ext.getCmp('title_field').getValue()+' ');
+	    			$("#descriptionheader").html(Ext.getCmp('description_field').getValue()==''?'':'DESCRIPTION: '+Ext.getCmp('description_field').getValue()+' ');
+	    			
+	    			//$("#libsearch").value(this.reader.jsonData.searchTerms);
+	    			//$("#collectionheader").html('in Collection: xyz');
+		        	this.each(function(item, index, totalItems ) {
+			        		/*var currentDate = new Date();
+			        		currentDate.setTime(item.data ['issue_date']);
+			        		
+	
+			        		
+			        		//Ext.Msg.alert('Status', item.data['issue_date']);
+			        		item.data['issue_date']=currentDate.toString();//Date.parseDate(currentDate, "Y-m-d");
+			        		//Ext.Msg.alert('Status', item.data['issue_date']);
+		        			*/
+					});
+	                //Ext.getCmp('resultsheader').setValue("Sample data");
+	
+	                //Ext.getCmp('categoryBox').setValue(categoryId; ?>);
+	            }
+	        },
+	        loadexception : function(This,o, arg,e) {
+	            //////alert(e.toString());
+	            ////////console.info('resuest failed :-(');
+	        },
+		            beforeload: {
+						fn: function(obj, options){
+		            		//////console.info("obj", obj);
+		            		//////console.info("options", options);
+							//////console.info('hi');
+							//options.params = {};
+							options.params || (options.params = {});
+							//////console.log(options);					
+							/*////console.log(options);
+		
+							this.cleanParams(options.params);		
+							var params = this.buildQuery(this.getFilterData());
+							////console.log(params);
+							Ext.apply(options.params, params);
+							
+							////console.log("onbeforeloooad", options, params);
+										
+							options.params.rows = 21;*/
+							//alert("beforeload");
+//							var selectedItem = tree.getSelectionModel().getSelectedNode();
+//							var handle = null;
+							//////console.info(handle);
+//			      			if(selectedItem){
+			      				//selectedItem = tree.getRootNode();
+//			      				if(!selectedItem.isRoot){
+//									handle = selectedItem.attributes.uri;
+									//console.log(handle);
+//				      			}
+//			      			}
+			      			//////console.log(selectedItem);
+			      			//////console.log(gridindex);
+			      			//if(gridindex==undefined){
+		//						gridindex=true;
+Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ keywords: parent.Ext.getCmp("searchsite").getValue() } );
+								//Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ loc: handle } );
+				      		//}else{
+		//		      			Ext.apply(options.params, {/*wb: wbSelect2.getValue()*/start: obj.params.start, loc: handle } );
+					      	//}
+			      			//if(initialload){
+							//	initialload=false;
+							//	////console.info(options, handle);
+							
+var lyos = '';
+var lcode = '';
+try{
+lyos = parent.yos;
+lcode=parent.code;							
+}catch(e){}
+								Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ loc: lyos, code: lcode } );
+				      		//}else{
+				      		//	////console.info(options, handle);
+							//	Ext.apply(options.params, {/*wb: wbSelect2.getValue()*/start: obj.params.start, loc: handle } );
+					        //}
+			      			
+			                  //////console.log("onbeforeload", options.params);
+		
+			                
+							
+						}
+		            }            
+		    }
+		
+		});
+		// set the default sorting for the corresponding sql query
+		media_store.setDefaultSort('id', 'DESC');
+		media_store.load();
+
+
+/*
+var media_storex = new Ext.data.JsonStore({
+    //url: 'index.do',
+	//autoLoad: true,
+    root: 'searchResults',
+    baseParams: {
+        method:   'post',
+        type: 'dspace',
+        keywords: 'search_term',
+        ////start: 0,
+start: 0,
+//loc: '123456789/1',
+        pagesize: 20,
+        //page: 0,
+        rows: 20,
+        //start: 0,
+		sidx: 'id',
+        sord: 'DESC'         
+    },
+    //params:{
+    //	start: 0
+    //},
+    paramNames:
+    {
+        start: "start",//"page",    // The parameter name which specifies the start row
+        limit: "rows",    // The parameter name which specifies number of rows to return
+        sort: "sidx",      // The parameter name which specifies the column to sort on
+        //query1: null,query2: null, query3: null, query4: null, query5: null, query6: null, query7: null, loc: null, 
+        dir: "sord"		   // The parameter name which specifies the sort direction                
+    },
+    totalProperty: 'maxResults',
+    idProperty: 'url',
+    //id: 'url',
+    fields: [
+        {name: 'id', mapping: 'url'},
+        {name: 'issue_date', type: 'date', mapping: 'issue_date', dateFormat: 'Y/m/d'},
+        {name: 'author', type: 'string'},
+        {name: 'title', type: 'string'},
+        {name: 'url', type: 'string'},
+        {name: 'bitstreams', type: 'string'},
+        {name: 'collection', type: 'string'},
+        {name: 'description', type: 'string', mapping: 'details'}
+    ],
+  //init order by status
+    sortInfo:{field: 'id', direction: "DESC"},
+    remoteSort: true,
+    proxy: new Ext.data.HttpProxy({
+        method: 'POST',
+        url: 'index.do'
+    }),
+    listeners: {
+            load: {
+                fn: function() {
+        			//Checkbox selection model
+        			var hd = Ext.fly(this.getView().innerHd).child('.x-grid3-hd-checker-on');
+        			if(hd){
+						hd.removeClass('x-grid3-hd-checker-on');
+            		}
+        			$("#resultsheader").html(this.reader.jsonData.searchTerms);
+		        	this.each(function(item, index, totalItems ) {
+
+					});
+                }
+            },
+            loadexception : function(This,o, arg,e) {
+
+            },
+            beforeload: {
+				fn: function(obj, options){
+					options.params || (options.params = {});
+						Ext.apply(options.params, {loc: '' } );
+				}
+            }            
+    }
+
+});*/
+// set the default sorting for the corresponding sql query
+//media_store.setDefaultSort('id', 'DESC');
+
+var pagingBar2 = new Ext.PagingToolbar({
+//plugins:new Ext.ux.Andrie.pPageSize(/*{dynamic: true}*/),
+    pageSize: 20,
+    store: media_store,
+    displayInfo: true,
+    displayMsg: 'Displaying records {0} - {1} of {2}',
+    emptyMsg: "No records to display",
+    
+    items:[
+        '-', {
+        pressed: true,
+        enableToggle:true,
+        text: 'showPreview',
+        cls: 'x-btn-text-icon details',
+        toggleHandler: function(btn, pressed){
+            var view = media_grid.getView();
+            view.showPreview = pressed;
+            view.refresh();
+        }
+    }]
+});
+
+function studentselected(id) {
+//alert(id);
+}
+
+var actions = new Ext.ux.grid.RowActions({
+    header:"Actions",
+    /*width:25,*/
+//      hideMode:"display",
+    actions:[
+       {
+          //iconIndex:"edit",
+          iconCls:"icon-ob",
+          qtip:"Open Item",
+          style:'background-color:yellow',
+          tooltip:'Open',
+          callback:function(grid, records, action, groupId) {
+				//Ext.ux.Toast.msg('Callback: icon-add-table', 'Group: <b>{0}</b>, action: <b>{1}</b>, records: <b>{2}</b>', groupId, action, records.length);
+				var location = window.location.href;
+				//////console.log(location);
+				//////console.log(location.slice(0));
+				var splitter = location.split("?");
+				//alert(splitter[0]);
+				window.open(splitter[0] + '/../../redirect.do?url=' + records.json.url, "dspace");
+				//////console.log(grid);
+				//////console.log(records);
+				//////console.log(action);
+				//////console.log(groupId);
+		  }
+                  
+          //text:"Edit"
+       }
+    ]
+});
+
+// defining the layout (columnmodel) of the table (grid) we want to create
+var mediaGrid_cm = new Ext.grid.ColumnModel([
+        new Ext.grid.RowNumberer({header:'No'/*,width:20*/}),
+        expander,        
+        {id:'id', header: 'id', dataIndex: 'id', hidden: true },
+    	{id:'issue_date', header: parent.dateIssued, dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('M d Y'), locked:false, sortable: true, tooltip:'Date of issue', filter: {/*xtype:"textfield",*/ xtype: "daterangefield", width: 70,
+			filterEncoder: function(value)
+			{
+				//return Ext.ux.form.DateRangeField.periodToExpr(value, "YmdHis");
+				//console.info(value, Ext.ux.form.DateRangeField.periodToExpr(value, "Y"));	
+				//return value;
+//console.log(value, value.begin);
+//console.log("zxzxzx", value, value.begin, value.end);
+if(value.begin == "" && value.end == ""){
+     return "";
+}else{
+//alert("zxcvbnmvalue3");
+    return value.begin + " TO " + value.end; 
+}
+				
+			},
+			filterDecoder: function(value)
+			{
+				//return Ext.ux.form.DateRangeField.exprToPeriod(value, "YmdHis");
+				//console.info(value, Ext.ux.form.DateRangeField.periodToExpr(value, "Y"));
+//console.log(value, value.begin);
+				//return value.begin + " TO " + value.end; 
+//alert("setting vslue2");
+				return value;
+			}
+, filterName: 'dop', id:'date_issue'/*, width: 50*/, allowBlank: true} },
+        {id:'author', header: parent.author, dataIndex: 'author', /*width: 120,*/ sortable: true, filter: {xtype:"textfield", filterName:"author", selectOnFocus:true, id:'author_field'/*, width: 100*/, width: 'auto'}, tooltip: 'the author(s) of the item'},
+        {id:'title', header: parent.title, dataIndex: 'title', /*width: 210,*/ sortable: true, filter: {xtype:"textfield", filterName: "title", selectOnFocus:true, id:'title_field'/*, width: 160*/, width: 'auto'}, tooltip: 'the title of the item'},
+        {id:'description', header: parent.description, dataIndex: 'description'/*, width: 180*/, sortable: true, tooltip:'the description of the item',
+            /*filter: {
+	            xtype: "combo",
+	            mode: "local",
+	            store: [["A","Type1"],["B","Type2"]],
+	            triggerAction: "all"
+	         }*/
+        	filter: {xtype:"textfield", filterName: "description", selectOnFocus:true, id:'description_field', width: 'auto'/*, width: 160*/}        
+        },actions
+     ]);
+mediaGrid_cm.defaultSortable = true; 
+
+
+// defining the grid
+var media_grid = new Ext.grid.GridPanel({
+	xtype: "grid",	
+title: 'Tabular View',
+////	el:'sample-box-inner',
+        id: 'searchgrid',
+        store: media_store,
+        cm: mediaGrid_cm,
+        viewConfig: {
+            ////forceFit: true,
+            ////enableRowBody:true,
+            ////showPreview:true,
+            /*getRowClass : function(record, rowIndex, p, store){
+			    if(this.showPreview){
+			        return 'x-grid3-row-expanded';
+			    }
+			    return 'x-grid3-row-collapsed';
+			}*/
+        },
+	view: new Ext.grid.GridView({
+			forceFit: true,
+//autoFill: true,
+			////enableRowBody: true,
+			////ignoreAdd: true,
+			emptyText: 'No Record Found'
+        }),
+        sm: /*new Ext.grid.RowSelectionModel({singleSelect:true}),*/sm2,
+        enableColLock: true,
+        stripeRows: true,
+        autoExpandColumn: 'title',
+        //width:790,
+//width: 'auto',
+//width: mediaGrid_cm.getTotalWidth(false),
+	layout: 'fit',
+        collapsed: false,
+        //height:300,
+        frame:false,
+        //header: false,
+        //title:'Search...',
+        trackMouseOver:true,
+        disableSelection:true,
+        loadMask: true,
+     // paging bar on the bottom
+        //bbar: pagingBar2,
+        plugins: [/*new Ext.ux.grid.FilterRow(), */new Ext.ux.grid.GridHeaderFilters(), expander, actions/*, checkColumn*/],        
+        collapsible: false,//true,
+        animCollapse: false,
+     // inline buttons
+        /*buttons: [{text:'Save',handler: function(){
+						        	var columns = [];
+									var cs = media_grid.getSelectionModel();
+//									var selections = cs.getSelection();
+									
+									Ext.each(cs.selections.items, function(item, index, totalItems ) {
+//console.log('dfddd',item.json, item.json.student_id);
+										columns.push(
+											item.json.student_id
+										);
+										//console.info(item, index, totalItems, 'dfghjk');
+									}, this);
+									//console.log(columns, Ext.util.JSON.encode({"hc":"bv"}));
+									var ids = Ext.encode(columns);
+									Ext.Ajax.request({url: '../array.php', params: {"id[]":columns}, method: 'POST', success: function(result, request){
+
+										var jsonData = Ext.util.JSON.decode(response.responseText);
+										Ext.Msg.show({title:'', msg:jsonData.data.result,buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.INFO});
+									}, failure: function(result, request){}});
+									//cs.selections.items.each(function(item, index, totalItems ) {
+
+									//});
+
+        							media_grid.getColumnModel().getColumnsBy(function(c){
+            							//console.info(c,'dfghj');
+        								columns.push({
+        								 	align: c.align,
+        								  	css: c.css,
+        								  	dataIndex: c.dataIndex,
+        								  	fixed: c.fixed,
+        								  	header: c.header,
+        								  	hidden: c.hidden,
+        								  	hideable: c.hideable,
+        								  	id: c.id,
+        								  	menuDisabled: c.menuDisabled,
+        								  	resizable: c.resizable,
+        								  	sortable: c.sortable,
+        								  	tooltip: c.tooltip,
+        								  	width: c.width
+        								});
+        							});
+        							var jsonData = Ext.encode(columns);
+        							//alert(jsonData);
+						         }
+         },{text:'Cancel'}],
+        buttonAlign:'center',
+        */
+        listeners: {
+contextmenu: onContextMenu,
+            /*load: {
+                fn: function() {
+
+                }
+            },
+            render: {
+			scope:this,
+			fn: function(){
+			  media_grid.getStore().load();
+            		
+			}
+            },*/
+//"afterrender": function(grid){
+//console.log(grid);
+//grid.resetHeaderFilters();
+//grid.syncSize();
+//grid.colModel.defaultWidth=101;
+//grid.colModel.defaults.width=101;
+//console.log(grid.getColumnModel());
+//console.log(grid.getColumnModel().getRenderer());
+//grid.getColumnModel().moveColumn(0);
+//grid.getColumnModel().relayEvents();
+//grid.getColumnModel().setColumnWidth(2, 100);
+//grid.getView().refresh();
+//grid.getColumnModel().fireEvent("resize", grid);
+//grid.syncSize();
+//grid.render();
+
+//var cols = mediaGrid_cm.getColumnsBy(function(){return true});
+//for ( var i = /*0*/2; i < cols.length - 1; i++) 
+//		{
+//			var co = cols[i];
+//console.log("z2", co, co.dataIndex);
+			
+//var iColIndex = mediaGrid_cm.findColumnIndex(co.dataIndex);
+//console.log("z3", iColIndex, mediaGrid_cm.getColumnWidth(iColIndex));
+
+//		}
+
+//},
+	filterupdate: {
+				scope: this,
+				fn: function(filtername, filtervalue, field){
+					//console.info(filtername, filtervalue, field);
+//alert('oops-filterupdate');
+					$(".x-grid3-td-numberer div:gt(0)").css("height", "1px");
+				}
+			}		
+    	},
+	iconCls:'icon-grid'
+});
+
+
+
+function onContextMenu(e){
+e.stopEvent(true);
+if(!this.contextMenu){
+this.contextMenu = new Ext.menu.Menu({
+id:'gridCtxMenu',
+items:[{text: 'Add'},{text: 'Delete'}]
+});
+}
+var xy = e.getXY();
+this.contextMenu.showAt(xy);
+}
+//var ctt = Ext.get('sample-box-inner');
+
+var tpll = new Ext.XTemplate(
+        '<div id="sample-ct">',
+//            '<tpl for=".">',
+            	'<div><h2><div unselectable="on">Search Description</div></h2>',
+	            	'<dl>',
+		                '<tpl for=".">',
+		                    '<dd ext:url="{url}"><img title="{title}" type="{url}" class="{collection}" src="../images/categories/{collection}.jpg" alt="{title}"/>',
+		                        '<div><h4>{author}</h4><p>{title}</p><p>{issue_date:date("M d Y")}</p></div>',
+		                    '</dd>',
+		                '</tpl>',
+	            		'<div style="clear:left"></div>',
+	            	'</dl>',
+            	'</div>',
+//            '</tpl>',
+        '</div>'
+    );
+
+var dv = new Ext.DataView({
+        store : media_store,
+id: 'datview',
+title: 'Icon View',
+emptyText: 'No items to display',
+singleSelect : true,
+	tpl : tpll,
+	trackOver: true,
+style:{
+	overflow: 'auto'
+},
+layout: 'fit',
+loadingText: 'Loading ...',
+loadMask: true,
+prepareData: function(data){
+	            data.title = Ext.util.Format.ellipsis(data.title, 80);
+	            //data.sizeString = Ext.util.Format.fileSize(data.size);
+	            //data.dateString = data.lastmod.format("m/d/Y g:i a");
+	            return data;
+	        },
+	//singleSelect : true,
+	listeners: {
+			    selectionchange: {
+		        	fn: function(dv,nodes){
+		            		var l = nodes.length;
+		            		var s = l != 1 ? 's' : '';
+		            		////////console.info(dv, nodes);
+		            		//panel.setTitle('Simple DataView ('+l+' item'+s+' selected)');
+		           	}
+		        },
+		        click:{
+					fn: function(el, i, n, e){
+						////console.info(el, i, n, e);
+
+						if(t = e.getTarget('dd', 5)){
+				            var url = Ext.fly(t).getAttributeNS('ext', 'url');
+							if(url){
+								window.open(url.indexOf('http') === 0 ? url : ('../redirect.do?url=' + url));
+							}
+				        }
+						//Ext.Msg.alert('Clicked', el.dom[attr]);
+					}
+			    }
+	        },
+        itemSelector : 'dd'//'dd'        
+    });
+    
+var viewport = new Ext.Viewport({
+            layout:'border',
+//renderTo : 'sample-box-inner',
+//render: true,
+            items:[
+//                new Ext.BoxComponent(
+new Ext.TabPanel({
+                    region: 'center',
+                    deferredRender:false,
+		    listeners:{
+			    beforetabchange: function(tabPanel, newTab, prevTab){}
+		    },
+                    activeTab:0,
+		    bbar: pagingBar2,
+		    tbar: [{
+                            text:'Reset',
+                            tooltip:'Clear Search Entries',
+                            iconCls:'add',
+                            handler: function () {
+//parent.Ext.getCmp("searchsite").setValue("zzzzzzzzzzzsdfg");
+                				//_METH_setActiveCard("prev");
+                				//alert("clicked");
+                				media_store.removeAll();
+                				/*Ext.getCmp('libsearch').reset();
+                				Ext.getCmp('libsearch').setRawValue('');*/
+                				////Ext.getCmp('libsearch').setValue("");
+                				//Ext.getCmp('libsearch').hasSearch(false);
+                				//console.log(Ext.getCmp('libsearch'));
+                				//console.log(media_grid);
+                				media_grid.resetHeaderFilters(/*[bReload]*/);
+                			}
+                        },
+						/*'search'+': ', new Ext.app.SearchField({
+			            id: 'libsearch',
+			            store: media_store,
+			            paramName: 'keywords',
+			            width:380,
+			            autoWidth: true,
+			            emptyText:'Search for...',
+			            selectOnFocus:true,
+			            //width: 380,
+			            resizable:false,
+			            hideClearButton: false,
+			        hideTrigger: false,
+			        typeAhead: true,
+			        triggerAction: 'all'
+			        }),*/ '<span> '+parent.searchResultsFor+': </span>', '<span id="resultsheader">&nbsp;</span>', '<span id="dateheader">&nbsp;</span>', '<span id="authorheader">&nbsp;</span>', '<span id="titleheader">&nbsp;</span>', '<span id="descriptionheader">&nbsp;</span>', '<span id="collectionheader">&nbsp;</span>'],
+                    items:[ media_grid, dv]
+                })
+/*)*/]});
+
+
+media_grid.fireEvent("afterrender");
+//console.log("xyz", viewport);
+/*var adjustWidth = function(colmodel, columnIndex, hidden){
+media_grid.setWidth(mediaGrid_cm.getTotalWidth(false));
+};
+mediaGrid_cm.on({
+"hiddenchange": adjustWidth,
+"widthchange": adjustWidth
+});
+media_grid.on("columnresize", adjustWidth);*/
+
+/*
+var cols = mediaGrid_cm.getColumnsBy(function(){return true});
+for ( var i = 2; i < cols.length - 1; i++) 
+		{
+			var co = cols[i];
+console.log("zz2", co, co.width, co.dataIndex);
+			
+var iColIndex = mediaGrid_cm.findColumnIndex(co.dataIndex);
+console.log("zzzzzzzzzzzzzzz3", iColIndex, mediaGrid_cm.getColumnWidth(iColIndex), mediaGrid_cm.getColumnAt(iColIndex));
+
+co.width = co.width-1;
+media_grid.getColumnModel().getColumnAt(iColIndex).width = media_grid.getColumnModel().getColumnAt(iColIndex).width-1;
+media_grid.getColumnModel().setColumnWidth(iColIndex, co.width-1);
+media_grid.getColumnModel().fireEvent("resize", media_grid.getColumnModel().getColumnAt(iColIndex), media_grid.getColumnModel().getColumnAt(iColIndex).width-1);
+		}*/
+//alert("b4render");
+//media_grid.headerFilters.panels.author.doLayout();//fireEvent("render");
+//media_grid.getView().refresh();
+
+//media_grid.rendered = false;
+//media_grid.render();
+//console.log("mmmmmmmmm", media_grid.getColumnModel().getRenderer());
+
+
+
+ct = Ext.get('datview');
+		ct.on('mouseover', function(e, t){
+	        if(t = e.getTarget('dd')){
+	            Ext.fly(t).addClass('over');
+	        }
+	    });
+	    ct.on('mouseout', function(e, t){
+	        if((t = e.getTarget('dd')) && !e.within(t, true)){
+	            Ext.fly(t).removeClass('over');
+	        }
+	    });
+		/*ct.on('click', function(e, t){
+	        if((t = e.getTarget('dd', 5)) && !e.getTarget('a', 3)){
+	            var url = Ext.fly(t).getAttributeNS('ext', 'url');
+				if(url){
+					window.open(url.indexOf('http') === 0 ? url : ('/reports/frameset?__report=undesa.rptdesign&sample=my+parameter&__format=pdf&' + url +'='));
+				}
+	        }else 
+			if(t = e.getTarget('h2', 3, true)){
+				t.up('div').toggleClass('collapsed');
+			}		
+	    });*/
+
+/*
+ct = Ext.get('sample-ct');
+		ct.on('mouseover', function(e, t){
+	        if(t = e.getTarget('dd')){
+	            Ext.fly(t).addClass('over');
+	        }
+	    });
+	    ct.on('mouseout', function(e, t){
+	        if((t = e.getTarget('dd')) && !e.within(t, true)){
+	            Ext.fly(t).removeClass('over');
+	        }
+	    });
+
+		ct.on('click', function(e, t){
+	        if((t = e.getTarget('dd', 5)) && !e.getTarget('a', 3)){
+	            var url = Ext.fly(t).getAttributeNS('ext', 'url');
+				if(url){
+					var win = new Ext.Window({
+							  id: Ext.id(),
+							  layout:'fit',
+							  width:950,
+							  modal: true,
+							  shadow: 'frame',
+							  shadowOffset: 4,
+							  constrain: true,
+							  height: 350,
+							  center: true,
+							  title: 'Attendance Details',
+							  layout: 'form',										
+									  items: {
+										  xtype: 'fieldset',
+										  height: 150,
+										  title: 'Church Info',
+										  defaultType: 'radio',
+										  items: [{
+											  checked: false,											  
+											  fieldLabel: 'Select Church',
+											  inputValue: 'off',  
+											  name: 'church',
+       										  boxLabel: 'New Church:'
+										  }, {
+											  checked: false,
+											  fieldLabel: '',
+											  inputValue: 'on',  
+											  name: 'church',
+       										  boxLabel: 'Available Church:'
+										  }]											
+									  }
+
+});
+win.show();
+				}
+	        }else 
+			if(t = e.getTarget('h2', 3, true)){
+				t.up('div').toggleClass('collapsed');
+			}		
+	    });
+*/
+    /*var dp = new Ext.TabPanel({
+                    renderTo : 'sample-box-inner',
+                    deferredRender:false,
+                    activeTab:0,
+					bbar: pagingBar2,
+					tbar: [{
+                            text:'Reset',
+                            tooltip:'Clear Search Entries',
+                            iconCls:'add'
+                        },
+						'search'+': ', new Ext.app.SearchField({
+			            id: 'libsearch',
+			            store: media_store,
+			            paramName: 'keywords',
+			            width:380,
+			            autoWidth: true,
+			            emptyText:'Search for...',
+			            selectOnFocus:true,
+			            //width: 380,
+			            resizable:false,
+			            hideClearButton: false,
+			        hideTrigger: false,
+			        typeAhead: true,
+			        triggerAction: 'all'
+			        }), '<span> '+'searchResultsFor'+': </span>', '<span id="resultsheader">&nbsp;</span>', '<span id="collectionheader">&nbsp;</span>'],
+                    items:[{
+                        contentEl:'center1',
+                        title: 'Close Me',
+                        closable:true,
+                        autoScroll:true
+                    },{
+                        contentEl:'center2',
+                        title: 'Center Panel',
+                        autoScroll:true
+                    }, media_grid, dv]
+                });
+    dp.render();*/
+
+$(".x-grid3-td-numberer div:gt(0)").css("height", "1px");
+
+});
+
+var updateGrid = function(){
+//alert(parent.search_term);
+    var grd = Ext.getCmp('searchgrid');
+    grd.getStore().load();
+//alert(parent.yos);
+}
+
+function updateview(viewClass){
+    //alert('viewing class!'+viewClass);
+    Ext.getDom('datview').className = viewClass;
+}
+
+var updateviewz = function(/*viewClass*/){
+    alert('viewing class!');
+    //Ext.getDom('datview').className = 'viewClass';
+}
+
+</script>
+</head>
+<body>
+<div id="sample-box-inner"></div>
+</body>
+</html>

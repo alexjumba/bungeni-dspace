@@ -1,0 +1,488 @@
+<html>
+<head>
+<!-- <script type="text/javascript" src="TabCloseMenu.js"></script> -->
+<script type="text/javascript">    
+
+	//Ext.MessageBox.alert("Its OK!");
+
+	
+	var media2_store = new Ext.data.JsonStore({
+		    //url: 'index.do',
+			//autoLoad: true,
+		    root: 'searchResults',
+		    baseParams: {
+		        method:   'post',
+		        type: 'dspace',
+		        keywords: 'kenya',
+		        start: 0,
+		        pagesize: 10,
+		        page: 1,
+		        rows: 10,
+		        sidx: 'id',
+		        sord: 'DESC'
+		    },
+		    paramNames:
+		    {
+		        start: "start",    // The parameter name which specifies the start row
+		        limit: "limit",    // The parameter name which specifies number of rows to return
+		        sort: "sort",      // The parameter name which specifies the column to sort on
+		        dir: "dir"         // The parameter name which specifies the sort direction
+		    },
+		    totalProperty: 'maxResults',
+		    idProperty: 'url',
+		    //id: 'url',
+		    fields: [
+		        {name: 'id', mapping: 'url'},
+		        {name: 'issue_date', type: 'date', mapping: 'issue_date', dateFormat: /*'Y/m/d'*/'timestamp'},
+		        {name: 'author', type: 'string'},
+		        {name: 'title', type: 'string'},
+		        {name: 'description', type: 'string', mapping: 'details'}
+		    ],
+		  //init order by status
+		    sortInfo:{field: 'id', direction: "DESC"},
+		    remoteSort: false,
+		    proxy: new Ext.data.HttpProxy({
+		        method: 'POST',
+		        url: 'index.do'
+		    }),
+		    listeners: {
+		            load: {
+		                fn: function() {
+				        	this.each(function(item, index, totalItems ) {
+					        		var currentDate = new Date();
+					        		currentDate.setTime(item.data ['issue_date']);
+					        		
+					        		/*var day = currentDate.getDate();
+					        		var month = currentDate.getMonth();
+					        		var year = currentDate.getFullYear();*/
+
+					        		
+					        		//Ext.Msg.alert('Status', item.data['issue_date']);
+					        		item.data['issue_date']=currentDate.toString();//Date.parseDate(currentDate, "Y-m-d");
+					        		//Ext.Msg.alert('Status', item.data['issue_date']);
+							});
+
+		                    //Ext.getCmp('categoryBox').setValue(categoryId; ?>);
+		                }
+		            }
+		    }
+
+		});
+		// set the default sorting for the corresponding sql query
+		media2_store.setDefaultSort('id', 'DESC');
+
+
+
+		var pagingBar4 = new Ext.PagingToolbar({
+		    pageSize: 25,
+		    store: media2_store,
+		    displayInfo: true,
+		    displayMsg: 'Displaying records {0} - {1} of {2}',
+		    emptyMsg: "No records to display",
+		    
+		    items:[
+		        '-', {
+		        pressed: true,
+		        enableToggle:true,
+		        text: 'Show Preview',
+		        cls: 'x-btn-text-icon details',
+		        toggleHandler: function(btn, pressed){
+		            var view = media2_grid.getView();
+		            view.showPreview = pressed;
+		            view.refresh();
+		        }
+		    }]
+		});
+
+
+		// loading the actual data from data.php
+		//media2_store.load();
+
+
+		//row expander
+		/*var expander = new Ext.grid.RowExpander({
+		    tpl : new Ext.Template(
+		        '<p><b>Title:</b> {title}</p><br>',
+		        '<p><b>Description:</b> {description}</p>'
+		    )
+		});*/
+
+		// defining the layout (columnmodel) of the table (grid) we want to create
+		var mediaGrid2_cm = new Ext.grid.ColumnModel([
+		        new Ext.grid.RowNumberer(),
+		        //expander,        
+		        {id:'id', header: 'id', dataIndex: 'id', hidden: true },
+		    	{id:'issue_date', header: 'Date Issued', dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('d/m/Y'), locked:false, sortable: true },
+		        {id:'author', header: 'Author', dataIndex: 'author', width: 120, sortable: true },
+		        {id:'title', header: 'Title', dataIndex: 'title', width: 200, sortable: true },
+		        {id:'description', header: 'Description', dataIndex: 'description', width: 230, sortable: true }
+		     ]);
+		mediaGrid2_cm.defaultSortable = true; 
+
+
+		// defining the grid
+		var media2_grid = new Ext.grid.GridPanel({
+			//el:'allid',
+		        id: 'Example_mediaGrid2',
+		        store: media2_store,
+		        cm: mediaGrid2_cm,
+		        viewConfig: {
+		            forceFit: true,
+		            enableRowBody:true,
+		            showPreview:false
+		        },
+		        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+		        stripeRows: true,
+		        autoExpandColumn: 'title',
+		        width:795,
+		        //height:300,
+		        frame:false,
+		        title:'Search...',
+		        trackMouseOver:false,
+		        disableSelection:true,
+		        loadMask: true,
+		     // paging bar on the bottom
+		        bbar: pagingBar4,
+		        //plugins: expander,        
+		        collapsible: false,
+		        animCollapse: false,
+		        //deferredRender:false,
+		        hideMode:'offsets',
+		        tbar: ['Search: ', new Ext.app.SearchField({
+		                   store: media2_store,
+		                   width:380,
+		                   autoWidth: true,
+			               emptyText:'Search for...',
+		                   selectOnFocus:true,
+		                   width: 380,
+		                   resizable:false,
+		                   hideClearButton: false,
+		               hideTrigger: false,
+		               typeAhead: true,
+		               triggerAction: 'all'
+		               })/*
+		               new Ext.ux.form.HistoryClearableComboBox({
+		                   emptyText:'Search for...',
+		                   selectOnFocus:true,
+		                   width: 380,
+		                   resizable:false,
+		                   hideClearButton: false,
+		               hideTrigger: false,
+		               typeAhead: true,
+		               triggerAction: 'all'
+		               })*/
+		           ],   
+		        iconCls:'icon-grid'
+		});
+
+
+
+		media2_store.load();
+		//media2_grid.render();
+	
+	//build Header Toolbar
+	/*var gridHead = media2_grid.getView().getHeaderPanel();
+	gridHead.show();
+	
+	var tb = new Ext.Toolbar(gridHead); */
+
+	var media3_grid;
+	var media3_store = new Ext.data.JsonStore({
+	    //url: 'index.do',
+		//autoLoad: true,
+	    root: 'searchResults',
+	    baseParams: {
+	        method:   'post',
+	        type: 'koha',
+	        keywords: 'kenya',
+	        //start: 0,
+	        pagesize: 20,
+	        //page: 0,
+	        rows: 20,
+	        sidx: 'id',
+	        sord: 'DESC' 
+	    },
+	    paramNames:
+	    {
+	        start: "page",    // The parameter name which specifies the start row
+	        limit: "rows",    // The parameter name which specifies number of rows to return
+	        sort: "sidx",      // The parameter name which specifies the column to sort on
+	        dir: "sord"		   // The parameter name which specifies the sort direction                
+	    },
+	    totalProperty: 'maxResults',
+	    idProperty: 'url',
+	    //id: 'url',
+	    fields: [
+	        {name: 'id', mapping: 'url'},
+	        {name: 'issue_date', type: 'date', mapping: 'issue_date', dateFormat: /*'Y/m/d'*/'timestamp'},
+	        {name: 'author', type: 'string'},
+	        {name: 'title', type: 'string'},
+	        {name: 'description', type: 'string', mapping: 'details'}
+	    ],
+	  //init order by status
+	    sortInfo:{field: 'id', direction: "DESC"},
+	    remoteSort: false,
+	    proxy: new Ext.data.HttpProxy({
+	        method: 'POST',
+	        url: 'index.do'
+	    }),
+	    listeners: {
+	            load: {
+	                fn: function() {
+				    	console.log(this);
+						console.log(this.reader.jsonData.searchTerms);
+						$("#resultsheader2").html(this.reader.jsonData.searchTerms);						
+			        	this.each(function(item, index, totalItems ) {
+				        		var currentDate = new Date();
+				        		currentDate.setTime(item.data ['issue_date']);
+				        		
+				        		/*var day = currentDate.getDate();
+				        		var month = currentDate.getMonth();
+				        		var year = currentDate.getFullYear();*/
+			
+				        		
+				        		//Ext.Msg.alert('Status', item.data['issue_date']);
+				        		item.data['issue_date']=currentDate.toString();//Date.parseDate(currentDate, "Y-m-d");
+				        		//Ext.Msg.alert('Status', item.data['issue_date']);
+						});
+			        	//media3_grid.syncSize();
+	                }
+	            }
+	    }
+
+	});
+	// set the default sorting for the corresponding sql query
+	media3_store.setDefaultSort('id', 'DESC');
+
+	var pagingBar5 = new Ext.PagingToolbar({
+	    pageSize: 20,
+	    store: media3_store,
+	    displayInfo: true,
+	    displayMsg: 'Displaying records {0} - {1} of {2}',
+	    emptyMsg: "No records to display",
+	    
+	    items:[
+	        '-', {
+	        pressed: true,
+	        enableToggle:true,
+	        text: 'Show Preview',
+	        cls: 'x-btn-text-icon details',
+	        toggleHandler: function(btn, pressed){
+	            var view = media3_grid.getView();
+	            view.showPreview = pressed;
+	            view.refresh();
+	        }
+	    }]
+	});
+
+	var expander2 = new Ext.grid.RowExpander({
+        tpl : new Ext.Template(
+            '<p><b>Title:</b> {title}</p><br>',
+            '<p><b>Description:</b> {description}</p>'
+        )
+    });
+
+	var mediaGrid3_cm = new Ext.grid.ColumnModel([
+	                                              new Ext.grid.RowNumberer(),
+	                                              expander2,        
+	                                              {id:'id', header: 'id', dataIndex: 'id', hidden: true },
+	                                          	{id:'issue_date', header: 'Date Issued', dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('d/m/Y'), locked:false, sortable: true, tooltip:'Date of issue', filter: {xtype:"datefield"} },
+	                                              {id:'author', header: 'Author', dataIndex: 'author', width: 120, sortable: true, filter: {xtype:"textfield", filterName:"CODE"}, tooltip: 'the author(s) of the item'},
+	                                              {id:'title', header: 'Title', dataIndex: 'title', width: 200, sortable: true, filter: {xtype:"textfield"}, tooltip: 'the title of the item'},
+	                                              {id:'description', header: 'Description', dataIndex: 'description', width: 230, sortable: true, tooltip:'the description of the item',
+	                                                  filter: {
+	                                      	            xtype: "combo",
+	                                      	            mode: "local",
+	                                      	            store: [["A","Type1"],["B","Type2"]],
+	                                      	            triggerAction: "all"
+	                                      	         }
+	                                              }
+	                                           ]);
+	                                      mediaGrid3_cm.defaultSortable = true; 
+
+
+	                              		// defining the grid
+	                              		/*var */media3_grid = new Ext.grid.GridPanel({
+	                              			//el:'allid',
+	                              			xtype: "grid",	
+	                              		        id: 'Example_mediaGrid3',
+	                              		        store: media3_store,
+	                              		        cm: mediaGrid3_cm,
+	                              		      viewConfig: {
+			                                        forceFit: true,
+			                                        enableRowBody:true,
+			                                        showPreview:false
+			                                    },
+			                                    sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+			                                    enableColLock: true,
+			                                    stripeRows: true,
+			                                    autoExpandColumn: 'title',
+			                                    width:795,
+			                                    collapsed: false,
+			                                    //height:300,
+			                                    frame:false,
+			                                    //header: false,
+			                                    //title:'Search...',
+			                                    trackMouseOver:false,
+			                                    disableSelection:true,
+			                                    loadMask: true,
+			                                 // paging bar on the bottom
+			                                    bbar: pagingBar5,
+			                                    plugins: [/*new Ext.ux.grid.FilterRow(), */new Ext.ux.grid.GridHeaderFilters(), expander],        
+			                                    collapsible: false,//true,
+			                                    animCollapse: false,
+			                                    listeners: {
+			                                        load: {
+			                                            fn: function() {	
+			                                        		//alert("loaded");	        	
+			                                    			//console.log('load listener');
+			                                                //Ext.getCmp('resultsheader').setValue("Sample data");
+			                                            }
+			                                        },
+			                                        render: {
+			                            				scope:this,
+			                            				fn: function(){
+			                                        		media3_grid.getStore().load();
+			                                        		//alert("loaded");
+			                                        		console.log('load listener1');
+			                                        		console.log(media3_grid.getStore());            		       	
+			                                    			console.log('load listener2');
+			                                    			//$("#resultsheader").html("Search Results for: ");
+			                                    			//alert(media_grid.getStore());	 
+			                            				}
+			                                        }
+			                                	},
+			                                    tbar: ['Search: ', new Ext.app.SearchField({
+			                                        store: media3_store,
+			                                        paramName: 'keywords',
+			                                        width:380,
+			                                        autoWidth: true,
+			                                        emptyText:'Search for...',
+			                                        selectOnFocus:true,
+			                                        width: 380,
+			                                        resizable:false,
+			                                        hideClearButton: false,
+			                                    hideTrigger: false,
+			                                    typeAhead: true,
+			                                    //params: {start: 1,
+			                                    //        pagesize: 10,
+			                                    //        page: 1,
+			                                    //        rows: 10,
+			                                    //        sidx: 'id',
+			                                    //        sord: 'DESC' },
+			                                    triggerAction: 'all'
+			                                    }), '<span> Search Results for: </span>', '<span id="resultsheader2">&nbsp;</span>'],
+			                                    iconCls:'icon-grid'
+			                            });
+
+	                              		//media3_store.load();
+
+	                              		
+	
+	var tabs = new Ext.TabPanel({
+        renderTo:'sample-box-inner',
+        resizeTabs:true, // turn on tab resizing
+        minTabWidth: 115,
+        tabWidth:135,
+        enableTabScroll:true,
+        //width:600,
+        activeTab: 0,
+        deferredRender: false,
+        hideMode:'offsets',        
+        height:515,
+        items:[{
+	            title: 'Dspace',
+	            iconCls: 'tabs',
+	            html: '<div id="dspaceid"></div>',
+	            closable:true
+	        },{
+	            title: 'Koha',
+	            iconCls: 'tabs',
+	            //html: '<div id="kohaid"></div>',
+	            items: [media3_grid],
+	            closable:true
+	        },{
+	            title: 'All',
+	            listeners: {activate: handleActivate},
+	            iconCls: 'tabs',
+	            //html: '<div id="allid"></div>',
+	            items: [media2_grid],
+	            //autoScroll:true,
+	            //contentEl: 'userProfile',	            	            
+	            layout: "fit",
+	            bodyStyle: 'padding:0px',	    	            
+	            closable:true
+	        }
+	    ],	    
+        defaults: {autoScroll:true}/*,
+        plugins: new Ext.ux.TabCloseMenu()*/
+    });
+
+	function handleActivate(tab){
+		$(".x-form-field-wrap").width(420);
+		/*Ext.MessageBox.alert("Its OK!");
+		
+		var gridHead = media2_grid.getView().getHeaderPanel();
+		alert("its ok");
+		gridHead.show();
+		
+		
+		var tb = new Ext.Toolbar(gridHead);*/
+        /*Ext.Ajax.request({
+                url: 'get_tabs.php',
+                success: function(xhr) {
+                    var newComponent = eval(xhr.responseText);
+                    tabs2.add(newComponent);
+                    tabs2.setActiveTab(newComponent)
+                }
+            });*/
+        console.log(tab);
+    }   
+    
+
+	
+    // tab generation code
+    /*var index = 0;
+    while(index < 7){
+        addTab();
+    }*/
+    /*addTab();
+    function addTab(){
+        tabs.add({
+            title: 'Digital Repo',
+            iconCls: 'tabs',
+            html: '<div id="dspace"></div>',
+            closable:true
+        }).show();
+        tabs.add({
+            title: 'Koha',
+            iconCls: 'tabs',
+            html: '<div id="koha"></div>',
+            closable:true
+        });
+        tabs.add({
+            title: 'All',
+            iconCls: 'tabs',
+            html: '<div id="all"></div>',
+            closable:true
+        });
+    }*/
+
+    /*new Ext.Button({
+        text: 'Add Tab',
+        handler: addTab,
+        iconCls:'new-tab'
+    }).render(document.body, 'tabs');*/
+
+
+
+
+
+
+
+    
+	
+</script>
+</head>
+<body></body>
+</html>

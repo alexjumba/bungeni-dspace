@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+		       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+	<ShortName>UNDESA [by:undesa.org]</ShortName>
+	<Description>Use undesa.org to search.</Description>
+	<!-- <Url type="text/html" method="get" template="http://bueltge.de/?s={searchTerms}"></Url> -->
+	<Contact>info@parliaments.info</Contact>
+	<LongName>UNDESA Crosswalk</LongName>
+	<Image height="16" width="16" type="image/x-icon">http://localhost/crosswalk/favicon.ico</Image>
+	<Tags>Dspace Koha Library Repository</Tags>
+	<Url type="application/atom+xml" template="http://localhost:8080/crosswalk/bungeni-opensearch?field1=ANY&amp;query1={searchTerms}&amp;start={startPage?}"/>
+	<!-- <Url type="application/rss+xml" template="http://bueltge.de/?q={searchTerms}&amp;pw={startPage?}&amp;format=rss"/> -->
+	<Url type="text/html" method="get" template="http://localhost:8080/crosswalk/main2.html?search={searchTerms}"/>
+	<Query role="example" searchTerms="blog"/>
+	<Developer>Jumba Alex Zeze</Developer>
+	<Attribution>
+	    UNDESA Search Copyright 2009, undesa.org [by:undesa.org], All Rights Reserved
+	</Attribution>
+	<SyndicationRight>open</SyndicationRight>
+	<AdultContent>false</AdultContent>
+	<Language>en</Language>
+	<OutputEncoding>UTF-8</OutputEncoding>
+	<InputEncoding>UTF-8</InputEncoding>
+	<moz:SearchForm>searchFormURL</moz:SearchForm>
+</OpenSearchDescription>

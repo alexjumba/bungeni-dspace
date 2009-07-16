@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	- DispatcherServlet application context for PetClinic's web tier.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+    
+    <security:http>
+        <security:intercept-url pattern="/secure/extreme/**" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/adventist/**" access="ROLE_ADMIN,ROLE_CLERK"/>
+        <security:intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_REMEMBERED" />
+        <security:intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_CLERK" />
+        <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_REMEMBERED" />
+        <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+
+        <security:form-login />
+        <security:anonymous />
+        <security:logout />
+    </security:http>
+
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="ldap://192.168.0.202:389" />
+		<property name="base" value="dc=eau,dc=adventist,dc=org" />
+		<property name="userDn" value="cn=admin,dc=eau,dc=adventist,dc=org" />
+		<property name="password" value="secret" />
+	</bean>
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource" />
+	</bean>
+
+	<!-- <security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"> -->
+		<!-- AspectJ pointcut expression that locates our "post" method and applies security that way
+		<protect-pointcut expression="execution(* bigbank.*Service.post*(..))" access="ROLE_TELLER"/>
+		-->
+	<!--  </security:global-method-security> -->
+	
+    <!--
+        Usernames/Passwords are
+        rod/koala
+        dianne/emu
+        scott/wombat
+    -->
+        <security:ldap-server url="ldap://192.168.0.202:389/dc=eau,dc=adventist,dc=org" manager-dn="cn=admin,dc=eau,dc=adventist,dc=org" manager-password="secret"/>
+
+	<security:ldap-authentication-provider user-search-filter="(uid={0})" user-search-base="ou=users, ou=credentials, o=registration" group-search-filter="(member={0})" group-search-base="ou=roles, ou=credentials, o=registration" />
+
+        <!-- <ldap-authentication-provider 
+            group-search-filter="member={0}" 
+            group-search-base="ou=groups"
+            user-search-base="ou=people"
+            user-search-filter="uid={0}"
+        /> -->
+        
+        
+
+</beans>

@@ -1,0 +1,379 @@
+<html>
+<head>
+<!-- <script type="text/javascript" src="RowExpander.js"></script> -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<title>MASINDE PROJECT</title>
+	<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/style.css" />
+	<link rel="stylesheet" type="text/css" href="../kit/misc/support/deploy/dev/resources/css/core.css" />
+	<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/css/extjs.css" />	
+	<!-- <link rel="stylesheet" type="text/css" href="../kit/misc/support/resources/css/ext-all.css"/> -->
+	<link rel="stylesheet" type="text/css" href="../kit/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../kit/examples/desktop/css/desktop.css" />
+
+	<link rel="stylesheet" type="text/css" href="../kit/misc/Ext.ux.grid.RowActions.css" />
+	
+	<!-- <script type="text/javascript" src="../../assets/js/extjs.js"></script>	-->
+	<script type="text/javascript" src="../kit/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../kit/misc/support/adapter/jquery/jquery-1.3.1.min.js"></script>
+<!-- <script type="text/javascript" src="../../assets/js/wizard.js"></script> -->
+<!-- <script type="text/javascript" src="../../adapter/jquery/ext-jquery-adapter.js"></script> -->
+	<!-- ENDLIBS -->
+	<script type="text/javascript" src="../kit/ext-all.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/css/sview2.css" />
+<link rel="stylesheet" type="text/css" href="../kit/misc/support/assets/css/sview3.css" />
+
+<script type="text/javascript" src="../kit/misc/TabCloseMenu.js"></script>
+<script type="text/javascript" src="../kit/misc/RowExpander.js"></script>
+<script type="text/javascript" src="../kit/misc/HistoryClearableComboBox.js"></script>
+<script type="text/javascript" src="../kit/misc/SearchField.js"></script>
+<script type="text/javascript" src="../kit/misc/SmartCheckboxSelectionModel.js"></script>
+<script type="text/javascript" src="../kit/misc/grid.advanced.js"></script>
+<script type="text/javascript" src="../kit/misc/ColumnNodeUI.js"></script>
+<script type="text/javascript" src="../kit/misc/adv-vtypes2.js"></script>
+<script type="text/javascript" src="../kit/misc/Ext.ux.grid.RowActions.js"></script>
+<script type="text/javascript" src="../kit/misc/DateRangeField.js"></script>
+<script type="text/javascript" src="../pPageSize.js"></script>
+	
+<script type="text/javascript" >
+	Ext.BLANK_IMAGE_URL = '../kit/resources/images/default/s.gif';
+</script>
+<style type="text/css">
+.imageview{
+    width: 64px;
+    height: 64px
+  }
+#sample-box-inner{
+    width: 100%;
+    height: auto;
+    border: 0px;
+}
+.icon-ob{
+    background-image: url('../images/disk.png');
+    height: 1em;
+}
+.task{
+	background-image: url(../images/so03226.png) !important;
+}
+
+a[href$='.pdf'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/pdf.png) center left no-repeat;
+}
+a[href$='.ppt'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/ppt.png) center left no-repeat;
+}
+a[href$='.doc'], a[href$='.odt'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/word.png) center left no-repeat;
+}
+a[href$='.txt'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/txt.png) center left no-repeat;
+}
+a[href$='.zip'], a[href$='.tar.gz'], a[href$='.tar'], a[href$='.tar.bz2'], a[href$='.7z'] {
+	display:inline-block;
+	padding-left:20px;
+	line-height:18px;
+	background:transparent url(../images/zip.png) center left no-repeat;
+}
+.ux-grid3-row-action-cell .x-grid3-cell-inner {
+    padding: 1px 0 0 0;
+}
+.ux-grid3-row-action-cell .x-grid3-cell-inner div {
+    background-repeat:no-repeat;
+    width:16px;
+    height:16px;
+    cursor:pointer;
+}
+</style>
+
+<script type="text/javascript">
+//Ext.Msg.alert('Status', 'Just testing...');
+Ext.onReady(function(){
+
+
+Ext.QuickTips.init();
+	Ext.useShims = true;
+
+var sm2 = new Ext.grid.SmartCheckboxSelectionModel({
+    email: true,
+    excel:true,
+    alwaysSelectOnCheck:false
+});
+
+				var media_store = new Ext.data.JsonStore({
+        //url: 'index.do',
+    	//autoLoad: true,
+        //root: 'searchResults',
+        baseParams: {
+            method:   'post',
+            type: 'dspace',
+            ////keywords: '',//search_term,
+            ////start: 0,
+    //start: 0,
+    //loc: '',
+            ////pagesize: 20,
+            //page: 0,
+            ////rows: 20,
+            //start: 0,
+//    		sidx: 'id',
+//            sord: 'DESC'         
+        },
+        /*params:{
+    		start: 0
+        },*/
+        paramNames:
+        {
+            start: "start",//"page",    // The parameter name which specifies the start row
+            limit: "rows",    // The parameter name which specifies number of rows to return
+            sort: "sidx",      // The parameter name which specifies the column to sort on
+            //query1: null,query2: null, query3: null, query4: null, query5: null, query6: null, query7: null, loc: null, 
+            dir: "sord"		   // The parameter name which specifies the sort direction                
+        },
+        totalProperty: 'maxResults',
+        idProperty: 'url',
+        //id: 'url',
+        fields: [
+            {name: 'uri', mapping: 'uri'},
+            {name: 'name', type: 'string'},
+            {name: 'description', type: 'string', mapping: 'description'}
+        ],
+      //init order by status
+        sortInfo:{field: 'url', direction: "DESC"},
+        remoteSort: true,
+        proxy: new Ext.data.HttpProxy({
+            method: 'POST',
+            url: '../reports.do'
+        }),
+        listeners: {
+        	load: {
+	            fn: function() {
+		        	this.each(function(item, index, totalItems ) {
+
+				});
+	            }
+	        },
+	        loadexception : function(This,o, arg,e) {
+	            //////alert(e.toString());
+	            ////////console.info('resuest failed :-(');
+	        },
+		            beforeload: {
+						fn: function(obj, options){
+		            		//////console.info("obj", obj);
+		            		//////console.info("options", options);
+							//////console.info('hi');
+							//options.params = {};
+							options.params || (options.params = {});
+							//////console.log(options);					
+							/*////console.log(options);
+		
+							this.cleanParams(options.params);		
+							var params = this.buildQuery(this.getFilterData());
+							////console.log(params);
+							Ext.apply(options.params, params);
+							
+							////console.log("onbeforeloooad", options, params);
+										
+							options.params.rows = 21;*/
+							//alert("beforeload");
+//							var selectedItem = tree.getSelectionModel().getSelectedNode();
+//							var handle = null;
+							//////console.info(handle);
+//			      			if(selectedItem){
+			      				//selectedItem = tree.getRootNode();
+//			      				if(!selectedItem.isRoot){
+//									handle = selectedItem.attributes.uri;
+									//console.log(handle);
+//				      			}
+//			      			}
+			      			//////console.log(selectedItem);
+			      			//////console.log(gridindex);
+			      			//if(gridindex==undefined){
+		//						gridindex=true;
+Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ keywords: parent.Ext.getCmp("searchsite").getValue() } );
+								//Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ loc: handle } );
+				      		//}else{
+		//		      			Ext.apply(options.params, {/*wb: wbSelect2.getValue()*/start: obj.params.start, loc: handle } );
+					      	//}
+			      			//if(initialload){
+							//	initialload=false;
+							//	////console.info(options, handle);
+							
+var lyos = '';
+var lcode = '';
+try{
+lyos = parent.yos;
+lcode=parent.code;							
+}catch(e){}
+								Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ loc: lyos, code: lcode } );
+				      		//}else{
+				      		//	////console.info(options, handle);
+							//	Ext.apply(options.params, {/*wb: wbSelect2.getValue()*/start: obj.params.start, loc: handle } );
+					        //}
+			      			
+			                  //////console.log("onbeforeload", options.params);
+		
+			                
+							
+						}
+		            }            
+		    }
+		
+		});
+		// set the default sorting for the corresponding sql query
+		media_store.setDefaultSort('id', 'DESC');
+		media_store.load();
+
+// set the default sorting for the corresponding sql query
+media_store.setDefaultSort('id', 'DESC');
+
+var pagingBar2 = new Ext.PagingToolbar({
+plugins:new Ext.ux.Andrie.pPageSize(/*{dynamic: true}*/),
+    pageSize: 20,
+    store: media_store,
+    displayInfo: true,
+    displayMsg: 'Displaying records {0} - {1} of {2}',
+    emptyMsg: "No records to display",
+    
+    items:[
+        '-', {
+        pressed: true,
+        enableToggle:true,
+        text: 'showPreview',
+        cls: 'x-btn-text-icon details',
+        toggleHandler: function(btn, pressed){
+            var view = media_grid.getView();
+            view.showPreview = pressed;
+            view.refresh();
+        }
+    }]
+});
+
+function studentselected(id) {
+//alert(id);
+}
+
+//var ctt = Ext.get('sample-box-inner');
+
+var tpll = new Ext.XTemplate(
+        '<div id="sample-ct">',
+//            '<tpl for=".">',
+            	'<div><h2><div unselectable="on">Search Description</div></h2>',
+	            	'<dl>',
+		                '<tpl for=".">',
+		                    '<dd ext:url="{uri}"><img title="{uri}" type="{uri}" class="{name}" src="../images/categories/{collection}.jpg" alt="{title}"/>',
+		                        '<div><h4>{description}</h4><p>{name}</div>',
+		                    '</dd>',
+		                '</tpl>',
+	            		'<div style="clear:left"></div>',
+	            	'</dl>',
+            	'</div>',
+//            '</tpl>',
+        '</div>'
+    );
+
+var dv = new Ext.DataView({
+        store : media_store,
+region: 'center',
+id: 'datview',
+title: 'Icon View',
+emptyText: 'No items to display',
+singleSelect : true,
+	tpl : tpll,
+	trackOver: true,
+style:{
+	overflow: 'auto'
+},
+layout: 'fit',
+loadingText: 'Loading ...',
+loadMask: true,
+prepareData: function(data){
+	            data.title = Ext.util.Format.ellipsis(data.title, 80);
+	            //data.sizeString = Ext.util.Format.fileSize(data.size);
+	            //data.dateString = data.lastmod.format("m/d/Y g:i a");
+	            return data;
+	        },
+	//singleSelect : true,
+	listeners: {
+			    selectionchange: {
+		        	fn: function(dv,nodes){
+		            		var l = nodes.length;
+		            		var s = l != 1 ? 's' : '';
+		            		////////console.info(dv, nodes);
+		            		//panel.setTitle('Simple DataView ('+l+' item'+s+' selected)');
+		           	}
+		        },
+		        click:{
+					fn: function(el, i, n, e){
+						////console.info(el, i, n, e);
+
+						if(t = e.getTarget('dd', 5)){
+				            var url = Ext.fly(t).getAttributeNS('ext', 'url');
+							if(url){
+								window.location.href = url.indexOf('http') === 0 ? url : ('../redirect.do?url=' + url);
+								//window.open(url.indexOf('http') === 0 ? url : ('../redirect.do?url=' + url));
+							}
+				        }
+						//Ext.Msg.alert('Clicked', el.dom[attr]);
+					}
+			    }
+	        },
+        itemSelector : 'dd'//'dd'        
+    });
+    
+var viewport = new Ext.Viewport({
+            layout:'border',
+//renderTo : 'sample-box-inner',
+//render: true,
+            items:dv});
+
+
+ct = Ext.get('datview');
+		ct.on('mouseover', function(e, t){
+	        if(t = e.getTarget('dd')){
+	            Ext.fly(t).addClass('over');
+	        }
+	    });
+	    ct.on('mouseout', function(e, t){
+	        if((t = e.getTarget('dd')) && !e.within(t, true)){
+	            Ext.fly(t).removeClass('over');
+	        }
+	    });
+
+$(".x-grid3-td-numberer div:gt(0)").css("height", "1px");
+
+});
+
+var updateGrid = function(){
+//alert(parent.search_term);
+    var grd = Ext.getCmp('searchgrid');
+    grd.getStore().load();
+//alert(parent.yos);
+}
+
+function updateview(viewClass){
+    //alert('viewing class!'+viewClass);
+    Ext.getDom('datview').className = viewClass;
+}
+
+var updateviewz = function(/*viewClass*/){
+    alert('viewing class!');
+    //Ext.getDom('datview').className = 'viewClass';
+}
+
+</script>
+</head>
+<body>
+<div id="sample-box-inner"></div>
+</body>
+</html>

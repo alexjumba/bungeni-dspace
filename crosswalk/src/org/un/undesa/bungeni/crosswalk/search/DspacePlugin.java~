@@ -1,0 +1,283 @@
+package org.un.undesa.bungeni.crosswalk.search;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.util.URIUtil;
+import org.springframework.ui.ModelMap;
+
+import com.thoughtworks.xstream.XStream;
+import org.dspace.sort.SortOption;
+
+public class DspacePlugin implements PluginInterface {
+
+	public SearchResults getDetails(SearchParameters sp) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("\n\n\nReached dsearch plugin getDetails");	  
+		
+		GetMethod methodz = new GetMethod(sp.getUrl()+"/showList");
+	    String uri = "handle="+sp.getIdentifier();
+		//System.out.println("\nx-url is "+uri);		
+	    String responsible = null;
+	    
+	    try {  		    
+  		    // Provide custom retry handler is necessary
+  		    methodz.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+  		    		new DefaultHttpMethodRetryHandler(3, false));
+  		    //method.getParams().setParameter("ident", new Integer(3));
+  		    
+  		    // Create an instance of HttpClient.
+  		    HttpClient client = new HttpClient();
+  		    
+  		    //HttpMethod methodz = new GetMethod(uri);
+  		    methodz.setQueryString(URIUtil.encodeQuery(uri));
+  		    System.out.println("\n\nWith Query String: "+methodz.getURI());
+  		    
+  		    System.out.println("\n\nabout 2 execute method");
+  	        // Execute the method.
+  	        int statusCode = client.executeMethod(methodz);
+  	        System.out.println("\n\nexecuted method");
+
+  	        if (statusCode != HttpStatus.SC_OK) {
+  	          System.err.println("Method failed: " + methodz.getStatusLine());
+  	        }
+
+  	        // Read the response body.
+  	        byte[] responseBody = methodz.getResponseBody();
+
+  	        // Deal with the response.
+  	        // Use caution: ensure correct character encoding and is not binary data
+  	        responsible = new String(responseBody);
+  	        //System.out.println(responsible);
+
+	    } catch (HttpException e) {
+  	        System.err.println("Fatal protocol violation: " + e.getMessage());
+  	        e.printStackTrace();
+  	        responsible = null;
+  	      } catch (IOException e) {
+  	        System.err.println("Fatal transport error: " + e.getMessage());
+  	        e.printStackTrace();
+  	        responsible = null;
+  	      } finally {
+  	        // Release the connection.
+  	        methodz.releaseConnection();
+  	      }  
+
+  	      if(responsible == null) {
+  	    	  SearchResults sr = new SearchResults();
+  	    	  //List<SearchResult> sr2 = new ArrayList<SearchResult>();
+  	    	  //sr.setSearchResults(sr2);
+  	    	  sr.setStartRecord(0);
+  	    	  return sr;
+  	      }  
+
+  	      XStream xstream = new XStream();
+  	      SearchResults results = (SearchResults)xstream.fromXML(responsible);
+  	      //if(results.getStartRecord()==0) {results.setStartRecord(1);}
+  	      //results.setMaxPages(50);//TODO: change to actual
+  	      System.out.println("\n\nmaxresultsz:"+results.getMaxResults());
+  	      System.err.println(responsible);
+  	      
+  	      
+  	      return results;
+	}
+
+	public SearchResults search(SearchParameters query) throws Exception {
+		System.out.println("\n\n\nReached dsearch plugin");	
+		GetMethod methodz = null;
+		String uri = "";
+		String kw = query.getKeyword();
+		try {
+			kw = kw.trim();
+		}catch(Exception e) {}
+		try {
+			if(kw.equalsIgnoreCase("")) {
+				kw=null;
+			}
+		}catch(Exception e) {
+			kw=null;
+			e.printStackTrace();
+		}
+		if(query.getLocation()==null) {query.setLocation("");}
+		if(query.getLocation() == null) { System.out.println("loc null");}else {  System.out.println("loc not null: "+ query.getLocation());}
+	    if(kw==null && query.getAuthors() ==null && query.getIssue_date_string()==null && query.getTitle()==null
+	    		&& query.getDescription()==null && query.getLocation() != null) {
+
+	    	String offset = query.getStartOffset().equalsIgnoreCase("")==true?"0":query.getStartOffset();
+	    	if(query.getYear()!=null) {
+	    		String location = query.getYear().substring(2);
+	    		uri="parliament="+location+"&range="+query.getLocation()+" TO "+query.getLocation()+"&start="+offset;
+	    		methodz = new GetMethod(query.getUrl()+"/bungeni-search");
+			    System.out.println("\nx-url is "+uri + " > bungeni-search");
+	    	}else {
+	    		//build the query to dspace
+		    	
+			    uri = "handle="+query.getLocation()+"&start="+offset;
+			    
+			    methodz = new GetMethod(query.getUrl()+"/listItems");
+			    System.out.println("\nx-url is "+uri+" > listItems");
+	    	}
+	    	
+	    }else {
+	    	//build the query to dspace
+	    	System.out.println("\n\n\n\nrange="+query.getIssue_date_string());
+		    uri = ((query.getAuthors()==null?null:query.getAuthors().trim()) == null ? "field1=author&query1=&" : "field1=author&query1="+query.getAuthors().trim().replaceAll("!", "NOT").replaceAll(">", "OR").replaceAll("~", "AND")+"&")
+		    +((query.getAbstract()==null?null:query.getAbstract().trim()) == null ? "field2=keyword&query2=&" : "field2=keyword&query2="+query.getAbstract().trim().replaceAll("!", "NOT").replaceAll(">", "OR").replaceAll("~", "AND")+"&")+((query.getTitle()==null?null:query.getTitle().trim()) == null ? "field3=title&query3=&" : "field3=title&query3="+query.getTitle().trim().replaceAll("!", "NOT").replaceAll(">", "OR").replaceAll("~", "AND")+"&")+
+		    ((query.getKeyword()==null?null:query.getKeyword().trim()) == null ? "field4=ANY&query4=&" : "field4=ANY&query4="+query.getKeyword().trim().replaceAll("!", "NOT").replaceAll(">", "OR").replaceAll("~", "AND")+"&")+"pagesize="+query.getRetrieveNumber()+"&start="+(query.getStartOffset().equalsIgnoreCase("")==true?"0":(Integer.valueOf(query.getStartOffset())/*-1*/))+"&sort_by="+query.getSortKey()+"&order="+query.getSortType()+"&num_search_field=4";
+		    if(query.getIssue_date_string()!=null) {
+		    	if(!query.getIssue_date_string().equalsIgnoreCase("")) {
+		    		uri = uri +"&range="+query.getIssue_date_string();
+		    	}		    	
+		    }else if(query.getLocation()!=null) {
+		    	if(!query.getLocation().equalsIgnoreCase("")) {
+		    		uri = uri+"&parliament="+query.getLocation();
+		    	}else {
+			    	uri=uri+"&loc="+query.getLocation();
+			    }
+		    }
+		    if(query.getYear()!=null) {
+		    	if(query.getYear().startsWith("*")) {
+			    	String location = query.getYear().substring(1);
+			    	uri=uri+"&range="+location+" TO "+location;
+			    }
+		    }		    
+		    
+		    methodz = new GetMethod(query.getUrl()+"/bungeni-search");
+		    System.out.println("\nx-url is "+uri + " > bungeni-search");
+	    }
+		
+	    
+	    String responsible = null;
+	    
+	    try {  		    
+  		    // Provide custom retry handler is necessary
+  		    methodz.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+  		    		new DefaultHttpMethodRetryHandler(3, false));
+  		    //method.getParams().setParameter("ident", new Integer(3));
+  		    
+  		    // Create an instance of HttpClient.
+  		    HttpClient client = new HttpClient();
+  		    
+  		    //HttpMethod methodz = new GetMethod(uri);
+  		    methodz.setQueryString(URIUtil.encodeQuery(uri));
+  		    System.out.println("\n\nWith Query String: "+methodz.getURI());
+  		    
+  		    System.out.println("\n\nabout 2 execute method");
+  	        // Execute the method.
+  	        int statusCode = client.executeMethod(methodz);
+  	        System.out.println("\n\nexecuted method");
+
+  	        if (statusCode != HttpStatus.SC_OK) {
+  	          System.err.println("Method failed: " + methodz.getStatusLine());
+  	        }
+
+  	        // Read the response body.
+  	        byte[] responseBody = methodz.getResponseBody();
+
+  	        // Deal with the response.
+  	        // Use caution: ensure correct character encoding and is not binary data
+  	        responsible = new String(responseBody);
+  	        //System.out.println(responsible);
+
+	    } catch (HttpException e) {
+  	        System.err.println("Fatal protocol violation: " + e.getMessage());
+  	        e.printStackTrace();
+  	        responsible = null;
+  	      } catch (IOException e) {
+  	        System.err.println("Fatal transport error: " + e.getMessage());
+  	        e.printStackTrace();
+  	        responsible = null;
+  	      } finally {
+  	        // Release the connection.
+  	        methodz.releaseConnection();
+  	      }  
+
+  	      if(responsible == null) {
+  	    	  SearchResults sr = new SearchResults();
+  	    	  //List<SearchResult> sr2 = new ArrayList<SearchResult>();
+  	    	  //sr.setSearchResults(sr2);
+  	    	  sr.setStartRecord(0);
+  	    	  return sr;
+  	      }
+
+  	      XStream xstream = new XStream();
+  	      SearchResults results = (SearchResults)xstream.fromXML(responsible);
+  	      //if(results.getStartRecord()==0) {results.setStartRecord(1);}
+  	      //results.setMaxPages(50);//TODO: change to actual
+  	      System.out.println("\n\nmaxresults:"+results.getMaxResults());
+  	      if(results.getSearchResults()==null)System.out.println("\n\n\nsearchresultsnull");
+  	      
+  	      
+  	      return results;
+	}
+	
+	public SearchResult itemDetails(SearchParameters query) {
+		GetMethod methodz = new GetMethod(query.getUrl()+"/itemDetails");
+	    String responsible = null;
+	    
+	    try {  		    
+  		    // Provide custom retry handler is necessary
+  		    methodz.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+  		    		new DefaultHttpMethodRetryHandler(3, false));
+  		    //method.getParams().setParameter("ident", new Integer(3));
+  		    
+  		    // Create an instance of HttpClient.
+  		    HttpClient client = new HttpClient();
+  		    
+  		    //HttpMethod methodz = new GetMethod(uri);
+  		    methodz.setQueryString(URIUtil.encodeQuery("url="+query.getIdentifier()));
+  		    System.out.println("\n\nWith Query String: "+methodz.getURI());
+  		    
+  		    System.out.println("\n\nabout 2 execute method");
+  	        // Execute the method.
+  	        int statusCode = client.executeMethod(methodz);
+  	        System.out.println("\n\nexecuted method");
+
+  	        if (statusCode != HttpStatus.SC_OK) {
+  	          System.err.println("Method failed: " + methodz.getStatusLine());
+  	        }
+
+  	        // Read the response body.
+  	        byte[] responseBody = methodz.getResponseBody();
+
+  	        // Deal with the response.
+  	        // Use caution: ensure correct character encoding and is not binary data
+  	        responsible = new String(responseBody);
+  	        //System.out.println(responsible);
+
+	    } catch (HttpException e) {
+  	        System.err.println("Fatal protocol violation: " + e.getMessage());
+  	        e.printStackTrace();
+  	        responsible = null;
+  	      } catch (IOException e) {
+  	        System.err.println("Fatal transport error: " + e.getMessage());
+  	        e.printStackTrace();
+  	        responsible = null;
+  	      } finally {
+  	        // Release the connection.
+  	        methodz.releaseConnection();
+  	      }  
+
+  	      if(responsible == null) {
+  	    	  SearchResult sr = null;//new SearchResult();
+  	    	  return sr;
+  	      }
+
+  	      XStream xstream = new XStream();
+  	      SearchResult results = (SearchResult)xstream.fromXML(responsible);
+  	      return results;
+	}
+
+}

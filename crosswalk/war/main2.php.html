@@ -1,0 +1,889 @@
+<html>
+<head>
+  <title>UNDESA Crosswalk</title>
+	<link rel="stylesheet" type="text/css" href="kit/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="kit/misc/support/assets/css/sview2.css" />
+<link rel="stylesheet" type="text/css" href="kit/misc/support/assets/css/sview3.css" />
+    <link rel="stylesheet" type="text/css" href="kit/examples/desktop/css/desktop.css" />
+<link rel="stylesheet" type="text/css" href="docs.css" />
+	
+    <!-- GC -->
+ 	<!-- LIBS -->
+ 	<script type="text/javascript" src="kit/adapter/ext/ext-base.js"></script>
+ 	<!-- ENDLIBS -->
+
+    <script type="text/javascript" src="kit/ext-all.js"></script>
+	<script type="text/javascript" src="kit/misc/support/adapter/jquery/jquery-1.3.1.min.js"></script>
+	
+	<script type="text/javascript" src="kit/misc/RowExpander.js"></script>
+	<script type="text/javascript" src="kit/misc/HistoryClearableComboBox.js"></script>
+	<script type="text/javascript" src="kit/misc/SmartCheckboxSelectionModel.js"></script>
+	<script type="text/javascript" src="kit/misc/SearchField.js"></script>
+	<script type="text/javascript" src="kit/misc/grid.advanced.js"></script>
+	<script type="text/javascript" src="kit/misc/ColumnNodeUI.js"></script>
+	<script type="text/javascript" src="kit/misc/adv-vtypes2.js"></script>
+	<script type="text/javascript" src="kit/misc/Ext.ux.grid.RowActions.js"></script>
+	<script type="text/javascript" src="kit/misc/DateRangeField.js"></script>
+	<script type="text/javascript" src="kit/misc/miframe.js"></script>
+
+  
+
+    <!--<script language="javascript" src="../grid/PropsGrid.js"></script>-->
+	<style type="text/css">
+	html, body {
+        font:normal 12px verdana;
+        margin:0;
+        padding:0;
+        border:0 none;
+        overflow:hidden;
+        height:100%;
+    }
+	p {
+	    margin:5px;
+	}
+    .settings {
+        background-image:url(kit/examples/shared/icons/fam/folder_wrench.png);
+    }
+    .nav {
+        background-image:url(kit/examples/shared/icons/fam/folder_go.png);
+    }
+	.icon-ob{
+	    background-image: url('kit/misc/disk.png');
+	    height: 1em;
+	}
+	.imageview{
+	    width: 64px;
+	    height: 64px
+	}
+    </style>
+
+<script type="text/javascript">
+function gup( name )
+{
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
+//Function to allow one JavaScript file to be included by another.
+//Copyright (C) 2006-08 www.cryer.co.uk
+function IncludeJavaScript(jsFile)
+{
+document.write('<script type="text/javascript" src="'+ jsFile + '"></scr' + 'ipt>'); 
+}
+
+var search_term = gup("search");
+var language = gup("lang");
+var skinny = gup("skinny");
+
+IncludeJavaScript('js.do?js=samples2-trans&lang='+language);
+//console.log(search_term+"  "+language);
+
+</script>
+
+
+	<script type="text/javascript">
+var yos = '';
+var code = '';
+var lecdate = '';
+
+	Ext.BLANK_IMAGE_URL = 'kit/resources/images/default/s.gif';
+	Ext.state.Manager.setProvider(new Ext.state.CookieProvider);
+
+    Ext.onReady(function(){
+		//Ext.Msg.alert('Status', 'Just testing...');
+		Ext.QuickTips.init();
+		// turn on validation errors beside the field globally
+	    Ext.form.Field.prototype.msgTarget = 'side';
+		Ext.useShims = true;
+
+        // NOTE: This is an example showing simple state management. During development,
+        // it is generally best to disable state management as dynamically-generated ids
+        // can change across page loads, leading to unpredictable results.  The developer
+        // should ensure that stable state ids are set for stateful components in real apps.
+        Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+        
+		// row expander
+    var expander = new Ext.grid.RowExpander({
+        tpl : new Ext.Template(
+'<div style="float:left;">',
+            '<img src={collections} style="width: 100px; height: 100px;">',
+'</div><div style="float: left; padding-left: 1em;">',
+            '<p><b>'+'English'+':</b> {collection}</p>',
+            '<p><b>Bitstreams [File(s)]:</b></p><br />{bitstreams}',
+'</div><br style="clear: both;"/>'
+        )
+    });
+	
+//	var sm2 = new Ext.grid.CheckboxSelectionModel({singleSelect:false});
+	var sm2 = new Ext.grid.SmartCheckboxSelectionModel({
+    email: true,
+    excel:true,
+    alwaysSelectOnCheck:false
+});
+    
+
+        var dummyData = [
+                         ['243566001','2009','Johnston Makokha','Kamukunji','600','23', '50', 'disk.png','66','true'],
+                         ['2133456','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol','symbol','false'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol','symbol','true'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol','symbol','false'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol','symbol','true']
+                        ];
+
+        var media_store = new Ext.data.SimpleStore({
+            fields: [
+		{name: 'id', mapping: 'id'},
+		{name: 'issue_date', type: 'string', mapping: 'issue_date'},
+		{name: 'author', type: 'string'},
+		{name: 'title', type: 'string'},
+		{name: 'url', type: 'string'},
+		{name: 'bitstreams', type: 'string'},
+		{name: 'collection', type: 'string'},
+		{name: 'collections', type: 'string'},
+		{name: 'attendance', type: 'bool'},
+		{name: 'description', type: 'string', mapping: 'details'}
+	    ]
+        });
+	media_store.loadData(dummyData);
+	
+	media_store.setDefaultSort('id', 'DESC');
+
+var pagingBar2 = new Ext.PagingToolbar({
+    pageSize: 20,
+    store: media_store,
+    displayInfo: true,
+    displayMsg: 'Displaying records {0} - {1} of {2}',
+    emptyMsg: "No records to display",
+    
+    items:[
+        '-', {
+        pressed: true,
+        enableToggle:true,
+        text: 'showPreview',
+        cls: 'x-btn-text-icon details',
+        toggleHandler: function(btn, pressed){
+            var view = media_grid.getView();
+            view.showPreview = pressed;
+            view.refresh();
+        }
+    }]
+});
+
+var action = new Ext.ux.grid.RowActions({
+    header:"Actions",
+    width:90,
+//      hideMode:"display",
+    actions:[
+       {
+          //iconIndex:"edit",
+          iconCls:"icon-ob",
+          qtip:"Open Item",
+          style:'background-color:yellow',
+          tooltip:'Open',
+          callback:function(grid, records, action, groupId) {
+
+var win = new Ext.Window({
+							  id: Ext.id(),
+							  layout:'fit',
+							  width:950,
+							  modal: true,
+							  shadow: 'frame',
+							  shadowOffset: 4,
+							  constrain: true,
+							  height: 350,
+							  center: true,
+							  title: 'Ext.ux.Wizard Example',
+							  layout: 'form',										
+									  items: {
+										  xtype: 'fieldset',
+										  height: 150,
+										  title: 'Church Info',
+										  defaultType: 'radio',
+										  items: [{
+											  checked: false,											  
+											  fieldLabel: 'Select Church',
+											  inputValue: 'off',  
+											  name: 'church',
+       										  boxLabel: 'New Church:'
+										  }, {
+											  checked: false,
+											  fieldLabel: '',
+											  inputValue: 'on',  
+											  name: 'church',
+       										  boxLabel: 'Available Church:'
+										  }]											
+									  }
+});
+win.show();
+				/*var location = window.location.href;
+				var splitter = location.split("?");
+				window.open(splitter[0] + '/../redirect.do?url=' + records.json.url, "dspace");*/
+		  }                  
+          //text:"Edit"
+       }
+    ]
+});
+
+// defining the layout (columnmodel) of the table (grid) we want to create
+var mediaGrid_cm = new Ext.grid.ColumnModel([
+        new Ext.grid.RowNumberer({header:'No',width:20}),
+        /*checkColumn,*/sm2,
+        expander,        
+        {id:'id', header: 'id', dataIndex: 'id', hidden: true },
+    	{id:'issue_date', header: 'dateIssued', dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('d/m/Y'), locked:false, sortable: true, tooltip:'Date of issue', /*filter: {xtype:"datefield", filterName: 'dop'}*/filter: {
+								xtype: "daterangefield", filterName: 'dop',
+			    				filterEncoder: function(value)
+			    				{
+			    					return Ext.ux.form.DateRangeField.periodToExpr(value, "YmdHis");	
+			    				},
+			    				filterDecoder: function(value)
+			    				{
+			    					return Ext.ux.form.DateRangeField.exprToPeriod(value, "YmdHis");
+			    				}
+							}
+		},
+        {id:'author', header: 'author', dataIndex: 'author', width: 120, sortable: true, filter: {xtype:"textfield", filterName:"author"}, tooltip: 'the author(s) of the item'},
+        {id:'title', header: 'title', dataIndex: 'title', width: 200, sortable: true, filter: {xtype:"textfield", filterName: "title"}, tooltip: 'the title of the item'},
+        {id:'description', header: 'description', dataIndex: 'description', width: 230, sortable: true, tooltip:'the description of the item',
+            /*filter: {
+	            xtype: "combo",
+	            mode: "local",
+	            store: [["A","Type1"],["B","Type2"]],
+	            triggerAction: "all"
+	         }*/
+        	filter: {xtype:"textfield", filterName: "description"}        
+        },action        
+     ]);
+mediaGrid_cm.defaultSortable = true; 
+
+
+// defining the grid
+var media_grid = new Ext.grid.GridPanel({
+	title: 'Tablular View',
+	xtype: "grid",	
+////	el:'sample-box-inner',
+        id: 'searchgrid',
+        store: media_store,
+        cm: mediaGrid_cm,
+        viewConfig: {
+            forceFit: true,
+            enableRowBody:true,
+            showPreview:true,
+            getRowClass : function(record, rowIndex, p, store){
+			    if(this.showPreview){
+			        return 'x-grid3-row-expanded';
+			    }
+			    return 'x-grid3-row-collapsed';
+			}
+        },
+        sm: /*new Ext.grid.RowSelectionModel({singleSelect:true}),*/sm2,
+        enableColLock: true,
+        stripeRows: true,
+        autoExpandColumn: 'title',
+        //width:790,
+	layout: 'fit',
+        collapsed: false,
+        //height:300,
+        frame:false,
+        //header: false,
+        //title:'Search...',
+        trackMouseOver:true,
+        disableSelection:true,
+        loadMask: true,
+     // paging bar on the bottom
+        //bbar: pagingBar2,
+        plugins: [/*new Ext.ux.grid.FilterRow(), */new Ext.ux.grid.GridHeaderFilters(), expander, action/*, checkColumn*/],        
+        collapsible: false,//true,
+        animCollapse: false,
+        
+        /*listeners: {
+            load: {
+                fn: function() {
+
+                }
+            },
+            render: {
+			scope:this,
+			fn: function(){
+			  media_grid.getStore().load();
+            		
+			}
+            }
+    	},*/
+		listeners: {
+			/*load: {
+	 fn: function() {
+	 //alert("loaded");
+	 //////console.log('load listener');
+	 //Ext.getCmp('resultsheader').setValue("Sample data");
+	 }
+	 },*/
+			render: {
+				scope: this,
+				fn: function(){
+				//////media_grid.getStore().load();
+				//alert("loaded");
+				//////console.log('load listener1');
+				//////console.log(media_grid.getStore());            		       	
+				//////console.log('load listener2');
+				//$("#resultsheader").html("Search Results for: ");
+				//alert(media_grid.getStore());	 
+				}
+			},
+			filterupdate: {
+				scope: this,
+				fn: function(filtername, filtervalue, field){
+					//console.info(filtername, filtervalue, field);
+					$(".x-grid3-td-numberer div:gt(0)").css("height", "1px");
+				}
+			}		
+		},
+	iconCls:'icon-grid'
+});
+
+/*
+var tpll = new Ext.XTemplate(
+        '<div id="sample-ct">',
+//            '<tpl for=".">',
+            	'<div><h2><div unselectable="on">Search Description</div></h2>',
+	            	'<dl>',
+		                '<tpl for=".">',
+		                    '<dd ext:url="{url}"><a target="_blank" href="http://10.2.28.227:8080/reports/frameset?__report=members_listing2.rptdesign&sample=my+parameter&__format=pdf&member={url}"><img title="{title}" type="{url}" class="{collection} imageview" src="../../assets/images/book.jpg"/>',
+		                        '<div><h4>{author}</h4><p>{title}</p><p>{issue_date}</p></div></a>',
+		                    '</dd>',
+		                '</tpl>',
+	            		'<div style="clear:left"></div>',
+	            	'</dl>',
+            	'</div>',
+//            '</tpl>',
+        '</div>'
+    );*/
+
+
+var tpll = new Ext.XTemplate(
+        '<div id="sample-ct">',
+//            '<tpl for=".">',
+            	'<div><h2><div unselectable="on">Search Description</div></h2>',
+	            	'<dl>',
+		                '<tpl for=".">',
+		                    '<dd ext:url="{url}"><img title="{author}" type="{url}" class="{collection}" src="kit/misc/support/assets/images/cat/{collection}.jpg" alt="{author}"/>',
+		                        '<div><h4>{author}</h4><p>{author}</p><p>{issue_date:date("M d Y")}</p></div>',
+		                    '</dd>',
+		                '</tpl>',
+	            		'<div style="clear:left"></div>',
+	            	'</dl>',
+            	'</div>',
+//            '</tpl>',
+        '</div>'
+    );
+
+
+var dv = new Ext.DataView({
+	title: 'Icon View',
+        store : media_store,
+	tpl : tpll,
+	trackOver: true,
+	//singleSelect : true,
+	listeners: {
+		click: function(d, i, n, e){
+			//console.info(d, i, n, e, this);
+			//window.open('http://localhost:8080/reports/frameset?__report=members_listing2.rptdesign&sample=my+parameter&__format=pdf&member=' + records.json.id, "member");
+			//alert('clicked');
+		}
+	},
+        itemSelector : 'dd'//'dd'        
+    });
+    
+	var hd = new Ext.Panel({
+        border: false,
+        layout:'anchor',
+        region:'north',
+        cls: 'docs-header',
+        height:60,
+        items: [{
+            xtype:'box',
+            el:'header',
+            border:false,
+            anchor: 'none -25'
+        },
+        new Ext.Toolbar({
+            cls:'top-toolbar',
+            items:[ ' ',
+			new Ext.form.TextField({
+				width: 200,
+				emptyText:'Search Site...',
+				listeners:{
+					render: function(f){
+						//f.el.on('keydown', filterTree, f, {buffer: 350});
+					}
+				}
+			}), ' ', ' ',
+			{
+                iconCls: 'icon-expand-all',
+		tooltip: 'Expand All',
+                handler: function(){
+		    //api.root.expand(true); 
+		}
+            }, '-', {
+                iconCls: 'icon-collapse-all',
+                tooltip: 'Collapse All',
+                handler: function(){
+		    //api.root.collapse(true);
+		}
+            }, '->', {
+                tooltip:'Hide Inherited Members',
+                iconCls: 'icon-hide-inherited',
+                enableToggle: true,
+toggleGroup: 'viewchange',
+handler: function(){
+//alert('dgdf');
+    var iframe = Ext.getCmp('iframe');
+    var uri = iframe.getFrame().getDocumentURI();
+    var uriarray = uri.split('/');
+    if(uriarray[uriarray.length-1]=='masinde3.html'){
+//alert('mas3');
+	//alert('it is masinde3');
+	iframe.getFrame().execScript('updateview("");');
+    }
+
+},
+                toggleHandler : function(b, pressed){
+                     //mainPanel[pressed ? 'addClass' : 'removeClass']('hide-inherited');
+                }
+            },{
+                tooltip:'Hide Inherited Members',
+                iconCls: 'icon-hide-inherited',
+                enableToggle: true,
+toggleGroup: 'viewchange',
+handler: function(){
+//alert('dgdf');
+    var iframe = Ext.getCmp('iframe');
+    var uri = iframe.getFrame().getDocumentURI();
+    var uriarray = uri.split('/');
+    if(uriarray[uriarray.length-1]=='masinde3.html'){
+//alert('mas3');
+	//alert('it is masinde3');
+	iframe.getFrame().execScript('updateview("mini-view");');
+    }
+
+},
+                toggleHandler : function(b, pressed){
+                     //mainPanel[pressed ? 'addClass' : 'removeClass']('hide-inherited');
+                }
+            }, {
+                tooltip:'Expand All Members',
+                iconCls: 'icon-expand-members',
+                enableToggle: true,
+toggleGroup: 'viewchange',
+handler: function(){
+//alert('dgdf');
+    var iframe = Ext.getCmp('iframe');
+    var uri = iframe.getFrame().getDocumentURI();
+    var uriarray = uri.split('/');
+    if(uriarray[uriarray.length-1]=='masinde3.html'){
+//alert('mas3');
+	//alert('it is masinde3');
+	iframe.getFrame().execScript('updateview("condensed-view");');
+    }
+
+},
+                toggleHandler : function(b, pressed){
+                    //mainPanel[pressed ? 'addClass' : 'removeClass']('full-details');
+var iframe = Ext.getCmp('iframe');
+var uri = iframe.getFrame().getDocumentURI();
+var uriarray = uri.split('/');
+if(uriarray[uriarray.length-1]=='masinde3.html'){
+    //alert('it is masinde3');
+    iframe.getFrame().execScript('updateView("condensed-view");');
+}
+
+                }
+            },'-', 'Welcome! ', {
+                iconCls: 'icon-collapse-all',
+                tooltip: 'Logout',
+                handler: function(){
+		    parent.window.location='logout.php';
+		    //alert('loggin out!');
+		    //api.root.collapse(true);
+		}
+            }]
+        })]
+    });
+
+       var viewport = new Ext.Viewport({
+            layout:'border',
+            items:[hd, {
+                    region:'west',
+                    id:'west-panel',
+                    title:'Menu',
+                    split:true,
+                    width: 200,
+                    minSize: 175,
+                    maxSize: 400,
+                    collapsible: true,
+                    margins:'0 0 0 5',
+                    layout:'accordion',
+                    layoutConfig:{
+                        animate:true
+                    },
+                    items: [new Ext.tree.TreePanel({
+                        id:'im-tree',
+                        title: 'Navigation Tree',
+                        //loader: new Ext.tree.TreeLoader(),
+                        rootVisible:false,
+                        lines:false,
+                        autoScroll:true,
+						/*tbar:[{
+                            text:'Add Lecture',
+                            tooltip:'Add New Lecture',
+                            iconCls:'add',
+			    handler: function(){
+
+								var iframe = Ext.getCmp('iframe');
+								var src = 'addlecture2.php';
+								iframe.setSrc(src);//.defer(350, iframe, [src, true]);
+							}
+                        }],*/                        tools:[{
+                            id:'refresh',
+                            on:{
+                                click: function(){
+                                    var tree = Ext.getCmp('im-tree');
+                                    tree.body.mask('Loading', 'x-mask-loading');
+                                    tree.root.reload();
+                                    tree.root.collapse(true, false);
+                                    setTimeout(function(){ // mimic a server call
+                                        tree.body.unmask();
+                                        tree.root.expand(true, true);
+                                    }, 1000);
+                                }
+                            }
+                        }],
+                        dataUrl: 'icollection.do?url='+defaultHome,//'tree2.php',
+
+        root: /*{
+            nodeType: 'async',
+            text: 'Units',
+            draggable:false,
+            id:'source'
+        },*/new Ext.tree.AsyncTreeNode({
+            text: 'Categories',
+            draggable: false,
+            disabled: false,
+            expandable: true,
+            expanded: true,
+            rootVisible: false,
+            id:'source'  
+          }),
+						listeners: {
+						    	'click': function(node, e){
+									
+									//console.log(node, e);
+									///var sn = this.selModel.selNode || {}; // selNode is null on initial selection
+var iframe = Ext.getCmp('iframe');
+var src = 'pages/masinde3.html';
+							    	if(node.leaf/* && node.id != sn.id*/){  // ignore clicks on folders and currently selected node 
+
+										
+										//Ext.state.Manager.set('ex', ex);
+										
+										// handle iframe
+										/*if(node.attributes.href) {
+											if(node.attributes.source) {
+												var src = 'source.php?file=' + node.attributes.href;
+											}
+											else {
+												var src = "test";//node.attributes.href;
+											}
+											iframe.setSrc.defer(350, iframe, [src, true]);
+										}*/
+										
+yos = node.attributes.uri;
+code = node.parentNode.attributes.uri;
+var uri = iframe.getFrame().getDocumentURI();
+var uriarray = uri.split('/');
+if(uriarray[uriarray.length-1]=='masinde3.html'){
+    //alert('it is masinde3');
+    iframe.getFrame().execScript('updateGrid();');
+}else{
+    iframe.setSrc(src);//.defer(350, iframe, [src, true]);
+}
+
+
+
+							    		/*Ext.getCmp('content-panel').layout.setActiveItem(n.id + '-panel');
+							    		if(!detailEl){
+							    			var bd = Ext.getCmp('details-panel').body;
+							    			bd.update('').setStyle('background','#fff');
+							    			detailEl = bd.createChild(); //create default empty div
+							    		}
+							    		detailEl.hide().update(Ext.getDom(n.id+'-details').innerHTML).slideIn('l', {stopFx:true,duration:.2});
+										*/
+							    	}else{
+    if(node.parentNode.isRoot){
+	yos = '';
+    }else{
+	yos = node.parentNode.text;
+    }    
+    code = node.text; 
+    lecdate = '';
+    var uri = iframe.getFrame().getDocumentURI();
+    var uriarray = uri.split('/');
+    if(uriarray[uriarray.length-1]=='masinde3.html'){
+	//alert('it is masinde3');
+	iframe.getFrame().execScript('updateGrid();');
+    }else{
+	iframe.setSrc(src);//.defer(350, iframe, [src, true]);
+    }
+}
+									e.stopEvent(); //.preventDefault() .stopPropagation()
+								},
+								scope: this
+							}
+                    }),{
+                        title:'Other Repos',
+                        //html:'<p>Some settings in here.</p>',
+contentEl: 'repos',
+                        border:false,
+                        iconCls:'settings'
+                    },{
+                        title:'Reports',
+                        //html:'<p>Some settings in here.</p>',
+contentEl: 'reports',
+                        border:false,
+                        iconCls:'settings'
+                    }]
+                },
+                /*new Ext.TabPanel({
+                    region:'center',
+                    deferredRender:false,
+                    activeTab:0,
+					bbar: pagingBar2,
+					tbar: [{
+                            text:'Reset',
+                            tooltip:'Clear Search Entries',
+                            iconCls:'add'
+                        },
+						'search'+': ', new Ext.app.SearchField({
+			            id: 'libsearch',
+			            store: media_store,
+			            paramName: 'keywords',
+			            width:380,
+			            autoWidth: true,
+			            emptyText:'Search for...',
+			            selectOnFocus:true,
+			            //width: 380,
+			            resizable:false,
+			            hideClearButton: false,
+			        hideTrigger: false,
+			        typeAhead: true,
+			        triggerAction: 'all'
+			        }), '<span> '+'searchResultsFor'+': </span>', '<span id="resultsheader">&nbsp;</span>', '<span id="collectionheader">&nbsp;</span>'],
+                    items:[{
+                        contentEl:'center1',
+                        title: 'Close Me',
+                        closable:true,
+                        autoScroll:true
+                    },{
+                        contentEl:'center2',
+                        title: 'Center Panel',
+                        autoScroll:true
+                    }, media_grid, dv]
+                }),*/{
+					 region:'center'
+					,id:'iframe'
+					,xtype:'iframepanel'
+					,border:false
+					,loadMask  : true,
+					loadMask:{hideOnReady: true, msg:'Loading ...'},
+				    frameConfig: {autoCreate:{id: 'frame1'}}  //optional, give the frame your own id and name
+					,defaultSrc:'pages/masinde3.html'
+					//,title:'&#160;'
+				}
+             ]
+        });
+	
+	
+	/*	
+		// load iframe and detail on tree click
+	tree.on({
+		click:{stopEvent:true, fn:function(n, e) {
+			e.stopEvent();
+			// handle detail
+			if(n.parentNode && n.parentNode.id) {
+				if(Ext.fly('detail-' + n.parentNode.id)) {
+					showDetail(n.parentNode.id);
+				}
+			}
+			if(n.id) {
+				if(Ext.fly('detail-' + n.id)) {
+					showDetail(n.id);
+				}
+			}
+
+			// handle iframe
+			if(n.attributes.href) {
+				if(n.attributes.source) {
+					var src = 'source.php?file=' + n.attributes.href;
+				}
+				else {
+					var src = n.attributes.href;
+				}
+				iframe.setSrc.defer(350, iframe, [src, true]);
+			}
+
+			// handle text click (toggle collapsed)
+			if(!n.isLeaf()) {
+				n.toggle();
+			}
+		}}
+	});
+	// }}}
+	// {{{
+	// handle theme switching within the iframe
+	var themeCombo = vp.items.itemAt(0).themeCombo;
+	themeCombo.setValue = themeCombo.setValue.createSequence(function(val) {
+		var iframeExt = iframe.iframe.getWindow().Ext;
+		if(iframeExt) {
+			iframeExt.util.CSS.swapStyleSheet(this.themeVar, this.cssPath + val);
+		}
+	});
+
+	iframe.on('documentloaded', function() {
+		// set theme
+		themeCombo.setValue(themeCombo.getValue());
+
+		// set title/permalink
+		var iw = this.iframe.getWindow();
+		var loc = iw.location;
+		var title = '';
+		if('/source.php' !== loc.pathname) {
+			title = 'Direct Link: <a href="' + loc.protocol + '//' + loc.host;
+			title += '?ex=' + loc.pathname.replace(/(^\/|\.html$)/g, '') + '" target="_blank"';
+			title += ' qtip="Use this link if you want to bookmark this example"';
+			title += '>';
+			title += iw.Ext.fly('page-title').dom.innerHTML + '</a>';
+		}
+		else {
+			title = iw.Ext.fly('page-title').dom.innerHTML;
+		}
+		this.setTitle(title);
+	});
+	// }}}
+	// {{{
+	// permalink handling
+	var page = Ext.urlDecode(window.location.search.substr(1));
+	if(page && page.ex) {
+		var node = tree.getNodeById(page.ex);
+		if(node) {
+			tree.collapseAll();
+			node.parentNode.expand(false, false, function() {node.expand()});
+		}
+		showDetail(page.ex);
+//		console.info(page.ex);
+		iframe.setSrc.defer(350, iframe, [Example.root + page.ex + '.html',true]);
+	}
+	else {
+		var ex = Ext.state.Manager.get('ex', 'root');
+		showDetail(ex);
+	}
+*/
+/*		ct = Ext.get('sample-ct');
+		ct.on('mouseover', function(e, t){
+	        if(t = e.getTarget('dd')){
+	            Ext.fly(t).addClass('over');
+	        }
+	    });
+	    ct.on('mouseout', function(e, t){
+	        if((t = e.getTarget('dd')) && !e.within(t, true)){
+	            Ext.fly(t).removeClass('over');
+	        }
+	    });
+		ct.on('click', function(e, t){
+	        //if((t = e.getTarget('dd', 5)) && !e.getTarget('a', 3)){
+	        //    var url = Ext.fly(t).getAttributeNS('ext', 'url');
+			//	if(url){
+			//		window.open(url.indexOf('http') === 0 ? url : ('/reports/frameset?__report=undesa.rptdesign&sample=my+parameter&__format=pdf&' + url +'='));
+			//	}
+	        //}else 
+			if(t = e.getTarget('h2', 3, true)){
+				t.up('div').toggleClass('collapsed');
+			}		
+	    });
+		*/
+		$(".x-grid3-td-numberer div:gt(0)").css("height", "1px");
+		
+        /*Ext.get("hideit").on('click', function() {
+           var w = Ext.getCmp('west-panel');
+           w.collapsed ? w.expand() : w.collapse(); 
+        });*/
+    });
+	
+function jump(url){
+      if(url=="acadyr.html"){
+	    Ext.MessageBox.alert("Confirm",'Create New Academic Year!.', function(){
+		  //alert('mmm');
+Ext.Ajax.request({url: 'acadyr.php', params: {usr: ''}, method: 'GET', success: function(){
+alert("success!!");
+}, failure: function(){}});
+	    });
+      }else{
+	    var iframe = Ext.getCmp('iframe');
+	    var src = url;
+	    var uri = iframe.getFrame().getDocumentURI();
+	    /*var uriarray = uri.split('/');
+	    if(uriarray[uriarray.length-1]=='masinde3.html'){
+		//alert('it is masinde3');
+		iframe.getFrame().execScript('updateGrid();');
+	    }else{
+		iframe.setSrc(src);//.defer(350, iframe, [src, true]);
+	    }*/
+	    iframe.setSrc(src);//.defer(350, iframe, [src, true]);
+
+      }
+}
+	</script>
+</head>
+<body style="height: 100%;">
+<script type="text/javascript" src="../shared/examples.js"></script><!-- EXAMPLES -->
+<div id="header">
+	<a href="#" style="float:right;margin-right:10px;"><img src="book.jpg" style="width:83px;height:24px;margin-top:1px;"/></a>
+
+	<div class="api-title">UNDESA Crosswalk</div>
+  </div>
+
+  <div id="west">
+<ul>
+<li><a href="javascript:jump('addstudent2.php');">Admit new student</a></li>
+<li><a href="javascript:jump('addunit.php');">Create new unit</a></li>
+<!-- <li><a href="javascript:jump('acadyr.html');">New Academic Year</a></li> -->
+</ul>
+    <!-- <p>Koha</p> -->
+  </div>
+
+<div id="reports">
+<ul>
+<li><a href="javascript:jump('http://10.2.28.227:8080/report/frameset?__report=new_report.rptdesign&__format=pdf');">All Reports</a></li>
+<!-- <li><a href="javascript:jump('acadyr.html');">New Academic Year</a></li> -->
+</ul>
+    <!-- <p>Koha</p> -->
+  </div>
+
+<div id="repos">
+<ul>
+<li><a href="javascript:jump('pages/masinde3.html');">Other Repos</a></li>
+<!-- <li><a href="javascript:jump('acadyr.html');">New Academic Year</a></li> -->
+</ul>
+    <!-- <p>Koha</p> -->
+  </div>
+
+  <div id="props-panel" style="width:200px;height:200px;overflow:hidden;">
+  </div>
+
+ </body>
+</html>

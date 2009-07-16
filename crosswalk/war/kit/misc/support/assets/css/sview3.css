@@ -1,0 +1,87 @@
+
+/* condensed view */
+
+.condensed-view > #sample-ct dd {
+    float:left;
+    width:135px;
+    height:114px;
+    margin:5px 5px 5px 10px;
+    cursor:pointer;
+    zoom:1;
+	text-align:center;
+}
+.condensed-view > #sample-ct dd img {
+    width:120px;
+    height:90px;
+    margin:5px 2px 0;
+    float:none;
+}
+
+.condensed-view > #sample-ct dd div {
+    float:none;
+    width:auto;
+    margin-left:0;
+}
+
+.condensed-view > #sample-ct dd h4 {
+    font-family:tahoma,arial,san-serif;
+    color:#666;
+    font-size:11px;
+    font-weight:normal;
+	text-align:center;
+	margin:0;
+}
+.condensed-view > #sample-ct dd p {
+    display:none;
+}
+.condensed-view > #sample-ct dd.over {
+	background:transparent url(../images/sview/sample-over.gif) no-repeat;
+}
+.condensed-view > #sample-ct dd.over h4 {
+	color:#1860A8;
+}
+
+/* mini view */
+
+.mini-view > #sample-ct dd {
+    float:left;
+    width:75px;
+    height:69px;
+    margin:5px 5px 5px 10px;
+    cursor:pointer;
+    zoom:1;
+	text-align:center;
+}
+.mini-view > #sample-ct dd img {
+    width:60px;
+    height:45px;
+    margin:5px 2px 0;
+    float:none;
+}
+
+.mini-view > #sample-ct dd div {
+    float:none;
+    width:auto;
+    margin-left:0;
+}
+
+.mini-view > #sample-ct dd h4 {
+    font-family:tahoma,arial,san-serif;
+    color:#666;
+    font-size:9px;
+    font-weight:normal;
+	text-align:center;
+	margin:0;
+	white-space: nowrap;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+.mini-view > #sample-ct dd p {
+    display:none;
+}
+.mini-view > #sample-ct dd.over {
+	background:#ebf7d2;
+}
+.mini-view > #sample-ct dd.over h4 {
+	color:#1860A8;
+}

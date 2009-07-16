@@ -1,0 +1,200 @@
+package org.un.undesa.bungeni.crosswalk.search;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.dspace.core.Context;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.*;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.dspace.app.webui.util.JSPManager;
+import org.dspace.authorize.AuthorizeException;
+import org.dspace.authorize.AuthorizeManager;
+import org.dspace.content.Collection;
+import org.dspace.content.Community;
+import org.dspace.core.Context;
+import org.dspace.core.LogManager;
+
+import com.thoughtworks.xstream.XStream;
+
+public class ListCollections extends HttpServlet {
+	protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException
+    {
+		System.out.println("\n\nreached showCollections");
+		// This will map community IDs to arrays of collections
+        Map colMap = new HashMap();
+
+        // This will map communityIDs to arrays of sub-communities
+        //Map commMap = new HashMap();
+
+        Community[] communities = null;
+        try {
+        	System.out.println("\n\nin findall try");
+        	communities = Community.findAllTop(getContext(request));
+        	System.out.println("\n\nin findall try after");
+        }catch(Exception ex) {
+        	System.out.println("\n\nin findall catch");
+        	ex.printStackTrace();
+        }
+
+        /*for (int com = 0; com < communities.length; com++)
+        {
+            Integer comID = new Integer(communities[com].getID());
+
+            // Find collections in community
+            Collection[] colls = null;
+            try {
+            	communities[com].getCollections();
+            }catch(Exception ex) {
+            	ex.printStackTrace();
+            }
+            colMap.put(comID, colls);
+
+            // Find subcommunties in community
+            Community[] comms = null;
+            try {
+            	communities[com].getSubcommunities();
+            }catch(Exception ex) {
+            	ex.printStackTrace();
+            }
+            commMap.put(comID, comms);
+        }*/
+           	
+        //List<Community> comm = new ArrayList<Community>();
+        List<CommunityCollection> ccl = null;
+        try {
+        	ccl=collect(communities);
+        }catch(Exception ex) {
+        	ex.printStackTrace();
+        }        
+        
+    	XStream xstream = new XStream();
+        String xml = xstream.toXML(ccl);
+    	
+        System.out.println("\n\n\nExtractRecord doGet ->"+xml);
+        
+        byte b[]= xml.getBytes();
+        //byte c[] = new byte[100];
+        //byte b2[]= xml.getBytes();
+        System.out.println("xml length is -> "+xml.length());
+        if(xml.length()==7) {
+        	System.out.println("\n\nxml 7");
+        }
+        ByteArrayInputStream bif= new ByteArrayInputStream(b/*2*/);
+        System.out.println("\n\n\nxml2");
+        OutputStream stream=response.getOutputStream();
+        System.out.println("\n\n\nxml3");
+        response.setContentType("text/xml");
+        System.out.println("\n\n\nxml1");
+        
+        int nextChar;
+        while ( ( nextChar = bif.read() ) != -1  ) {
+        	//System.out.println("\n\n\nxml-w1");
+        	stream.write(nextChar);
+        	//stream.write( '\n' );
+        	stream.flush();
+        }
+        System.out.println("\n\n\nxml4");
+        if(bif!=null)bif.close();
+        System.out.println("\n\n\nxml6");
+        if(stream!=null) stream.close();
+        System.out.println("\n\n\nxml5");
+	}
+	
+	private Context getContext(HttpServletRequest request) throws Exception{
+        //Context context = null;
+
+        // set all incoming encoding to UTF-8
+        request.setCharacterEncoding("UTF-8");
+        
+        Context c = (Context) request.getAttribute("dspace.context");        
+
+        if (c == null)
+        {
+            // No context for this request yet
+            c = new Context();
+            HttpSession session = request.getSession();
+
+            // See if a user has authentication
+            Integer userID = (Integer) session.getAttribute(
+                    "dspace.current.user.id");
+            // Set the session ID and IP address
+            c.setExtraLogInfo("session_id=" + request.getSession().getId() + ":ip_addr=" + request.getRemoteAddr());
+
+            // Store the context in the request
+            request.setAttribute("dspace.context", c);
+        }
+
+        return c;
+	}
+	
+	protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException
+    {
+		
+    	doGet(request, response);
+    }
+	
+	private List<CommunityCollection> collect(Community[] communities) throws Exception {
+		List<CommunityCollection> ccl = new ArrayList<CommunityCollection>();        
+        for(Community cm : communities) {
+        	//comm.add(cm);
+        	CommunityCollection cc = new CommunityCollection();
+        	cc.setCommunityHandle(cm.getHandle());
+        	cc.setCommunityName(cm.getMetadata("name"));
+        	List<CommunityCollection> lcom = new ArrayList<CommunityCollection>();
+		List<CollectionCollection> zcol = new ArrayList<CollectionCollection>();
+		if(cm.getSubcommunities().length == 0){
+			List<CollectionCollection> lcol = new ArrayList<CollectionCollection>();
+			for(org.dspace.content.Collection cn2: cm.getCollections()) {
+				CollectionCollection col = new CollectionCollection();
+				col.setCollectionHandle(cn2.getHandle());
+				col.setCollectionName(cn2.getMetadata("name"));
+				lcol.add(col);
+	    	    	}
+			//zcol.add(lcol);
+			zcol=lcol;
+		}else{
+
+			for(org.dspace.content.Community cn: cm.getSubcommunities()) {
+				CommunityCollection collect = new CommunityCollection();
+				collect.setCommunityHandle(cn.getHandle());
+				collect.setCommunityName(cn.getMetadata("name"));
+				
+				List<CollectionCollection> lcol = new ArrayList<CollectionCollection>();
+				for(org.dspace.content.Collection cn2: cn.getCollections()) {
+					CollectionCollection col = new CollectionCollection();
+			    		col.setCollectionHandle(cn2.getHandle());
+			    		col.setCollectionName(cn2.getMetadata("name"));
+			    		lcol.add(col);
+	    	    		}
+				collect.setCollection(lcol); 
+				lcom.add(collect);
+
+			}
+        	
+        		
+	    	}
+        	if(!lcom.isEmpty())cc.setCommunity(lcom);
+		if(!zcol.isEmpty())cc.setCollection(zcol);
+        	ccl.add(cc);        	
+        }
+        return ccl;
+	}
+}

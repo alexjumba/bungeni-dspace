@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.20" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 2.5.0.v20090520 Build &lt;2.5.0.v20090526-0630></property>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/blank_report.gif</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <data-sources>
+        <oda-data-source extensionID="org.eclipse.datatools.enablement.oda.xml" name="allitems" id="7">
+            <text-property name="displayName"></text-property>
+            <property name="FILELIST">http://localhost:8080/jspui/bungeni-opensearch?pagesize=20&amp;start=0&amp;field1=ANY&amp;query1=report</property>
+        </oda-data-source>
+    </data-sources>
+    <data-sets>
+        <oda-data-set extensionID="org.eclipse.datatools.enablement.oda.xml.dataSet" name="allitemsset" id="8">
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">title</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">published</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">summary</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">id</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">author</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">content</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">allitems</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">title</property>
+                    <property name="nativeName">title</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">published</property>
+                    <property name="nativeName">published</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">summary</property>
+                    <property name="nativeName">summary</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">id</property>
+                    <property name="nativeName">id</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">author</property>
+                    <property name="nativeName">author</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">content</property>
+                    <property name="nativeName">content</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[table0#-TNAME-#table0#:#[/feed/entry]#:#{title;STRING;/title},{published;STRING;/published},{summary;STRING;/summary},{id;STRING;/id},{author;STRING;/author},{content;STRING;/content}#:#<"","http:%%www.w3.org%1999%xhtml";"os","http:%%a9.com%-%spec%opensearch%1.1%">]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>1.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>title</design:name>
+            <design:position>1</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>title</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>published</design:name>
+            <design:position>2</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>published</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>summary</design:name>
+            <design:position>3</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>summary</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>id</design:name>
+            <design:position>4</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>id</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>author</design:name>
+            <design:position>5</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>author</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>content</design:name>
+            <design:position>6</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>content</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>
+]]></xml-property>
+            <list-property name="privateDriverProperties">
+                <ex-property>
+                    <name>MAX_ROW</name>
+                    <value>20</value>
+                </ex-property>
+                <ex-property>
+                    <name>XML_FILE</name>
+                </ex-property>
+            </list-property>
+        </oda-data-set>
+    </data-sets>
+    <styles>
+        <style name="report" id="4">
+            <property name="fontFamily">"Verdana"</property>
+            <property name="fontSize">10pt</property>
+        </style>
+        <style name="crosstab-cell" id="5">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="crosstab" id="6">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+    </styles>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <page-footer>
+                <text id="3">
+                    <property name="contentType">html</property>
+                    <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                </text>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <grid id="9">
+            <column id="10"/>
+            <column id="11"/>
+            <column id="12"/>
+            <row id="13">
+                <cell id="14"/>
+                <cell id="15"/>
+                <cell id="16"/>
+            </row>
+            <row id="17">
+                <cell id="18">
+                    <property name="colSpan">3</property>
+                    <property name="rowSpan">1</property>
+                    <table id="25">
+                        <property name="dataSet">allitemsset</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">title</property>
+                                <expression name="expression">dataSetRow["title"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">published</property>
+                                <expression name="expression">dataSetRow["published"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">summary</property>
+                                <expression name="expression">dataSetRow["summary"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">id</property>
+                                <expression name="expression">dataSetRow["id"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">author</property>
+                                <expression name="expression">dataSetRow["author"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">content</property>
+                                <expression name="expression">dataSetRow["content"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="38"/>
+                        <column id="39"/>
+                        <column id="40"/>
+                        <header>
+                            <row id="26">
+                                <cell id="27">
+                                    <label id="41">
+                                        <text-property name="text">id</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="28">
+                                    <label id="43">
+                                        <text-property name="text">summary</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="29">
+                                    <label id="45">
+                                        <text-property name="text">title</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="30">
+                                <cell id="31">
+                                    <data id="42">
+                                        <property name="resultSetColumn">id</property>
+                                    </data>
+                                </cell>
+                                <cell id="32">
+                                    <data id="44">
+                                        <property name="resultSetColumn">summary</property>
+                                    </data>
+                                </cell>
+                                <cell id="33">
+                                    <data id="46">
+                                        <property name="resultSetColumn">title</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                        <footer>
+                            <row id="34">
+                                <cell id="35"/>
+                                <cell id="36"/>
+                                <cell id="37"/>
+                            </row>
+                        </footer>
+                    </table>
+                </cell>
+            </row>
+            <row id="21">
+                <cell id="22"/>
+                <cell id="23"/>
+                <cell id="24"/>
+            </row>
+        </grid>
+    </body>
+</report>

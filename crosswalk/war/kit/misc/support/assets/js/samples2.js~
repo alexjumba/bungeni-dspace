@@ -1,0 +1,175 @@
+var tree_test = 1;
+var initialload = true;
+Ext.onReady(function(){	
+	var catalog = [{
+        title: repoGrid,
+		iconCls:'icon-apps',
+		cls:'active',
+		treeid: 'treeid',
+        samples: [{
+            text: 'Feed Viewer 2.0',
+            url: 'feed-viewer/view.html',
+            icon: 'feeds.gif',
+            desc: 'RSS 2.0 feed reader sample application that features a swappable reader panel layout.'
+        }]
+    }/*,{
+        title: repoIcon,
+        iconCls:'icon-grid',
+        treeid: '',
+        samples: [{
+            text: 'Basic Array Grid',
+            url: 'grid/array-grid.html',
+            icon: 'grid-array.gif',
+            desc: 'A basic read-only grid loaded from local array data that demonstrates the use of custom column renderer functions.'
+        }]
+    }*/,{
+        title: repoOther,
+        iconCls:'icon-tabs',
+        treeid: '',
+        samples: [{
+            text: 'Basic Tabs',
+            url: 'tabs/tabs.html',
+            icon: 'tabs.gif',
+            desc: 'Basic tab functionality including autoHeight, tabs from markup, Ajax loading and tab events.'
+        }]
+    }];
+
+    for(var i = 0, c; c = catalog[i]; i++){
+        c.id = 'sample-' + i;
+    }
+
+	var menu = Ext.get('sample-menu-inner'), 
+		ct = Ext.get('sample-box-inner');
+	
+	var tpl = new Ext.XTemplate(
+        '<div id="sample-ct">',
+            '<tpl for=".">',
+            '<div><a name="{id}" id="{id}"></a><h2><div unselectable="on">{title}</div></h2>',
+            '<dl>',
+                '<tpl for="samples">',
+                    '<dd ext:url="{url}"><img title="{text}" src="/deploy/dev/examples/shared/screens/{icon}"/>',
+                        '<div><h4>{text}</h4><p>{desc}</p></div>',
+                    '</dd>',
+                '</tpl>',
+            '<div style="clear:left"></div></dl></div>',
+            '</tpl>',
+        '</div>'
+    );
+
+	/*tpl.overwrite(ct, catalog);*/
+	
+	
+	var tpl2 = new Ext.XTemplate(
+        '<tpl for="."><div><a href="#{id}" hidefocus="on" class="{cls}" id="a4{id}"><img src="s.gif" class="{iconCls}">{title}</a><div id="{treeid}"></div></div></tpl>'
+    );
+    tpl2.overwrite(menu, catalog);
+
+    var splitter = Ext.get('treeid');
+    splitter.createChild({id: 'tree0', tag: 'div', html: '', cls: ''/*, cn: {tag: 'code', style: '', name: '', type: '', size: 0}*/});
+    splitter.createChild({id: 'tree1', tag: 'div', html: '', cls: ''});
+
+	
+	function calcScrollPosition(){
+		var found = false, last;
+		ct.select('a[name]', true).each(function(el){
+			last = el;
+			if(el.getOffsetsTo(ct)[1] > -5){
+				activate(el.id)
+				found = true;
+				return false;
+			}
+		});
+		if(!found){
+			activate(last.id);
+		}
+	}
+	
+	var bound;
+	function bindScroll(){
+		ct.on('scroll', calcScrollPosition, ct, {buffer:250});
+		bound = true;
+	}
+	function unbindScroll(){
+		ct.un('scroll', calcScrollPosition, ct);
+		bound = false;
+	}
+	function activate(id){
+		Ext.get('a4' + id).radioClass('active');
+	}
+	
+	ct.on('mouseover', function(e, t){
+        if(t = e.getTarget('dd')){
+            Ext.fly(t).addClass('over');
+        }
+    });
+    ct.on('mouseout', function(e, t){
+        if((t = e.getTarget('dd')) && !e.within(t, true)){
+            Ext.fly(t).removeClass('over');
+        }
+    });
+	ct.on('click', function(e, t){
+        if((t = e.getTarget('dd', 5)) && !e.getTarget('a', 3)){
+            var url = Ext.fly(t).getAttributeNS('ext', 'url');
+			if(url){
+				window.open(url.indexOf('http') === 0 ? url : ('/reports/frameset?__report=undesa.rptdesign&sample=my+parameter&__format=pdf&' + url +'='));
+			}
+        }else if(t = e.getTarget('h2', 3, true)){
+			t.up('div').toggleClass('collapsed');
+		}		
+    });
+
+	var /*addMember*/bd = Ext.get('sample-2');
+// turn on validation errors beside the field globally
+    Ext.form.Field.prototype.msgTarget = 'side';
+    
+	menu.on('click', function(e, t){
+		console.info('at click');
+		if((t = e.getTarget('a', 2))/* && bound*/){
+			var ident = t.href.split('#')[1];
+			/*var top = Ext.getDom(id).offsetTop;*/
+			Ext.get(t).radioClass('active');
+//Ext.get(ident).show();
+			if(ident == 'sample-0'){
+				$("#treeid").show();
+			}else{
+				$("#treeid").hide();
+			}
+
+			var cp = Ext.get("sample-box-inner");
+		    var mgr = cp.getUpdateManager();
+		    mgr.loadScripts=true;
+		    mgr.update(ident+'.html');
+
+/*$('#sample-box-inner > div').hide();
+var test = '#'+ident;
+//alert(ident + '     '+test);
+$(test).show();*/
+//Ext.get(t).enableDisplayMode('block');
+
+//tab2.render(/*document.body*/bd);
+//bd.radioClass('activity');
+			/*unbindScroll();
+			ct.scrollTo('top', top, {callback:bindScroll});*/
+
+			e.stopEvent();
+		}
+	});
+	
+	
+	
+	var cp = Ext.get("sample-box-inner");
+    var mgr = cp.getUpdateManager();
+    mgr.loadScripts=true;
+    mgr.update('sample-0'+'.html');
+	
+	
+	Ext.get('samples-cb').on('click', function(e){
+		var img = e.getTarget('img', 2);
+		if(img){
+			Ext.getDom('samples').className = img.className;
+			calcScrollPosition.defer(10);
+		}
+	});
+	
+	bindScroll();
+});

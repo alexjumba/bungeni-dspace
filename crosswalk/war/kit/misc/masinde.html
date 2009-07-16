@@ -1,0 +1,361 @@
+<html>
+<head>
+<!-- <script type="text/javascript" src="RowExpander.js"></script> -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<title>MASINDE PROJECT</title>
+	<link rel="stylesheet" type="text/css" href="../../assets/style.css" />
+	<link rel="stylesheet" type="text/css" href="../../deploy/dev/resources/css/core.css" />
+	<link rel="stylesheet" type="text/css" href="../../assets/css/extjs.css" />	
+<link rel="stylesheet" type="text/css" href="../../resources/css/ext-all.css"/>
+
+	
+	
+	<!-- <script type="text/javascript" src="../../assets/js/extjs.js"></script>	-->
+	<script type="text/javascript" src="../../adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../../adapter/jquery/jquery-1.3.1.min.js"></script>
+<!-- <script type="text/javascript" src="../../assets/js/wizard.js"></script> -->
+<!-- <script type="text/javascript" src="../../adapter/jquery/ext-jquery-adapter.js"></script> -->
+	<!-- ENDLIBS -->
+	<script type="text/javascript" src="../../ext-all.js"></script>
+<link rel="stylesheet" type="text/css" href="../../assets/css/sview2.css" />
+
+<script type="text/javascript" src="TabCloseMenu.js"></script>
+<script type="text/javascript" src="RowExpander.js"></script>
+<script type="text/javascript" src="HistoryClearableComboBox.js"></script>
+<script type="text/javascript" src="SearchField.js"></script>
+<script type="text/javascript" src="grid.advanced.js"></script>
+<script type="text/javascript" src="ColumnNodeUI.js"></script>
+<script type="text/javascript" src="adv-vtypes2.js"></script>
+<script type="text/javascript" src="Ext.ux.grid.RowActions.js"></script>
+
+<script type="text/javascript" >
+	Ext.BLANK_IMAGE_URL = '../../resources/images/default/s.gif';
+</script>
+<style type="text/css">
+.imageview{
+    width: 64px;
+    height: 64px
+  }
+#sample-box-inner{
+    width: 100%;
+    height: auto;
+    border: 0px;
+}
+</style>
+
+<script type="text/javascript">
+//Ext.Msg.alert('Status', 'Just testing...');
+Ext.onReady(function(){
+
+
+Ext.QuickTips.init();
+
+
+  // row expander
+    var expander = new Ext.grid.RowExpander({
+        tpl : new Ext.Template(
+            '<p><b>Title:</b> {title}</p><br>',
+            '<p><b>'+'description'+':</b> {description}</p>',
+            '<p><b>Bitstreams [File(s)]:</b></p><br />{bitstreams}'
+        )
+    });
+
+var reader = new Ext.data.ArrayReader({}, [
+                                                   {name: 'id'},
+                                                   {name: 'selected'},
+                                                   {name: 'name'},
+                                                   {name: 'type'}
+                                                ]);
+
+        var dummyData = [
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol'],
+                         ['%','dsfsdf','2009/8/20','dfg','dfg','dfg', '%', 'symbol']
+                        ];
+
+        var media_store = new Ext.data.SimpleStore({
+            fields: [
+		{name: 'id', mapping: 'url'},
+		{name: 'issue_date', type: 'date', mapping: 'issue_date', dateFormat: 'Y/m/d'/*'timestamp'*/},
+		{name: 'author', type: 'string'},
+		{name: 'title', type: 'string'},
+		{name: 'url', type: 'string'},
+		{name: 'bitstreams', type: 'string'},
+		{name: 'collection', type: 'string'},
+		{name: 'description', type: 'string', mapping: 'details'}
+	    ]
+        });
+	media_store.loadData(dummyData);
+
+/*
+var media_storex = new Ext.data.JsonStore({
+    //url: 'index.do',
+	//autoLoad: true,
+    root: 'searchResults',
+    baseParams: {
+        method:   'post',
+        type: 'dspace',
+        keywords: 'search_term',
+        ////start: 0,
+start: 0,
+//loc: '123456789/1',
+        pagesize: 20,
+        //page: 0,
+        rows: 20,
+        //start: 0,
+		sidx: 'id',
+        sord: 'DESC'         
+    },
+    //params:{
+    //	start: 0
+    //},
+    paramNames:
+    {
+        start: "start",//"page",    // The parameter name which specifies the start row
+        limit: "rows",    // The parameter name which specifies number of rows to return
+        sort: "sidx",      // The parameter name which specifies the column to sort on
+        //query1: null,query2: null, query3: null, query4: null, query5: null, query6: null, query7: null, loc: null, 
+        dir: "sord"		   // The parameter name which specifies the sort direction                
+    },
+    totalProperty: 'maxResults',
+    idProperty: 'url',
+    //id: 'url',
+    fields: [
+        {name: 'id', mapping: 'url'},
+        {name: 'issue_date', type: 'date', mapping: 'issue_date', dateFormat: 'Y/m/d'},
+        {name: 'author', type: 'string'},
+        {name: 'title', type: 'string'},
+        {name: 'url', type: 'string'},
+        {name: 'bitstreams', type: 'string'},
+        {name: 'collection', type: 'string'},
+        {name: 'description', type: 'string', mapping: 'details'}
+    ],
+  //init order by status
+    sortInfo:{field: 'id', direction: "DESC"},
+    remoteSort: true,
+    proxy: new Ext.data.HttpProxy({
+        method: 'POST',
+        url: 'index.do'
+    }),
+    listeners: {
+            load: {
+                fn: function() {
+        			$("#resultsheader").html(this.reader.jsonData.searchTerms);
+		        	this.each(function(item, index, totalItems ) {
+
+					});
+                }
+            },
+            loadexception : function(This,o, arg,e) {
+
+            },
+            beforeload: {
+				fn: function(obj, options){
+					options.params || (options.params = {});
+						Ext.apply(options.params, {loc: '' } );
+				}
+            }            
+    }
+
+});*/
+// set the default sorting for the corresponding sql query
+media_store.setDefaultSort('id', 'DESC');
+
+var pagingBar2 = new Ext.PagingToolbar({
+    pageSize: 20,
+    store: media_store,
+    displayInfo: true,
+    displayMsg: 'Displaying records {0} - {1} of {2}',
+    emptyMsg: "No records to display",
+    
+    items:[
+        '-', {
+        pressed: true,
+        enableToggle:true,
+        text: 'showPreview',
+        cls: 'x-btn-text-icon details',
+        toggleHandler: function(btn, pressed){
+            var view = media_grid.getView();
+            view.showPreview = pressed;
+            view.refresh();
+        }
+    }]
+});
+
+var action = new Ext.ux.grid.RowActions({
+    header:"Actions",
+    width:90,
+//      hideMode:"display",
+    actions:[
+       {
+          //iconIndex:"edit",
+          iconCls:"icon-ob",
+          qtip:"Open Item",
+          style:'background-color:yellow',
+          tooltip:'Open',
+          callback:function(grid, records, action, groupId) {
+				var location = window.location.href;
+				var splitter = location.split("?");
+				window.open(splitter[0] + '/../redirect.do?url=' + records.json.url, "dspace");
+		  }                  
+          //text:"Edit"
+       }
+    ]
+});
+
+// defining the layout (columnmodel) of the table (grid) we want to create
+var mediaGrid_cm = new Ext.grid.ColumnModel([
+        new Ext.grid.RowNumberer({header:'No',width:20}),
+        expander,        
+        {id:'id', header: 'id', dataIndex: 'id', hidden: true },
+    	{id:'issue_date', header: 'dateIssued', dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('d/m/Y'), locked:false, sortable: true, tooltip:'Date of issue', filter: {xtype:"datefield", filterName: 'dop'} },
+        {id:'author', header: 'author', dataIndex: 'author', width: 120, sortable: true, filter: {xtype:"textfield", filterName:"author"}, tooltip: 'the author(s) of the item'},
+        {id:'title', header: 'title', dataIndex: 'title', width: 200, sortable: true, filter: {xtype:"textfield", filterName: "title"}, tooltip: 'the title of the item'},
+        {id:'description', header: 'description', dataIndex: 'description', width: 230, sortable: true, tooltip:'the description of the item',
+            /*filter: {
+	            xtype: "combo",
+	            mode: "local",
+	            store: [["A","Type1"],["B","Type2"]],
+	            triggerAction: "all"
+	         }*/
+        	filter: {xtype:"textfield", filterName: "description"}        
+        },action
+     ]);
+mediaGrid_cm.defaultSortable = true; 
+
+
+// defining the grid
+var media_grid = new Ext.grid.GridPanel({
+	xtype: "grid",	
+////	el:'sample-box-inner',
+        id: 'searchgrid',
+        store: media_store,
+        cm: mediaGrid_cm,
+        viewConfig: {
+            forceFit: true,
+            enableRowBody:true,
+            showPreview:true,
+            getRowClass : function(record, rowIndex, p, store){
+			    if(this.showPreview){
+			        return 'x-grid3-row-expanded';
+			    }
+			    return 'x-grid3-row-collapsed';
+			}
+        },
+        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+        enableColLock: true,
+        stripeRows: true,
+        autoExpandColumn: 'title',
+        width:790,
+        collapsed: false,
+        //height:300,
+        frame:false,
+        //header: false,
+        //title:'Search...',
+        trackMouseOver:true,
+        disableSelection:true,
+        loadMask: true,
+     // paging bar on the bottom
+        //bbar: pagingBar2,
+        plugins: [/*new Ext.ux.grid.FilterRow(), */new Ext.ux.grid.GridHeaderFilters(), expander, action],        
+        collapsible: false,//true,
+        animCollapse: false,
+        /*listeners: {
+            load: {
+                fn: function() {
+
+                }
+            },
+            render: {
+			scope:this,
+			fn: function(){
+			  media_grid.getStore().load();
+            		
+			}
+            }
+    	},*/
+	iconCls:'icon-grid'
+});
+
+var ctt = Ext.get('sample-box-inner');
+
+var tpll = new Ext.XTemplate(
+        '<div id="sample-ct">',
+//            '<tpl for=".">',
+            	'<div><a name="{title}" id="{title}"></a><h2><div unselectable="on">Search Description</div></h2>',
+	            	'<dl>',
+		                '<tpl for=".">',
+		                    '<dd ext:url="{url}"><img title="{title}" type="{url}" class="{collection} imageview" src="../../assets/images/book.jpg"/>',
+		                        '<div><h4>{author}</h4><p>{title}</p><p>{issue_date}</p></div>',
+		                    '</dd>',
+		                '</tpl>',
+	            		'<div style="clear:left"></div>',
+	            	'</dl>',
+            	'</div>',
+//            '</tpl>',
+        '</div>'
+    );
+
+var dv = new Ext.DataView({
+        store : media_store,
+	tpl : tpll,
+	singleSelect : true/*,
+        itemSelector : 'dd'*/        
+    });
+    
+    var dp = new Ext.TabPanel({
+//activeTab: 0,
+//plain:true,
+//header: false,
+//border: false,
+defaults:{autoScroll: true},
+        title : 'Data View',
+        //region : 'center',
+        //layout : 'border',//'fit'
+height: 510,
+autoScroll:true,
+activeTab: 0,
+	renderTo : 'sample-box-inner',
+deferredRender: false,
+/*	emptyText: 'No items to display', */
+bbar: pagingBar2,
+tbar: ['search'+': ', new Ext.app.SearchField({
+            id: 'libsearch',
+            store: media_store,
+            paramName: 'keywords',
+            width:380,
+            autoWidth: true,
+            emptyText:'Search for...',
+            selectOnFocus:true,
+            //width: 380,
+            resizable:false,
+            hideClearButton: false,
+        hideTrigger: false,
+        typeAhead: true,
+        triggerAction: 'all'
+        }), '<span> '+'searchResultsFor'+': </span>', '<span id="resultsheader">&nbsp;</span>', '<span id="collectionheader">&nbsp;</span>'],
+/*listeners : { 
+									click : function(d, i, n, e) {
+										Ext.getCmp(objParentPanel.id+"modIcon").setValue(n.id);
+										chooserIcon.hide();
+										//alert(n.id + objParentPanel.id); 
+										// myclick(i); 
+									} 
+								}
+*/
+        items : [{title: 'Grid View', id: 'gdd', items: [media_grid], autoScroll: true}/*, {title: 'Icon View', id: 'gd', items: [dv], autoScroll: true}*/]
+
+    });
+    dp.render();
+
+$(".x-grid3-td-numberer div:gt(0)").css("height", "1px");
+
+});
+</script>
+</head>
+<body>
+<div id="sample-box-inner"></div>
+</body>
+</html>

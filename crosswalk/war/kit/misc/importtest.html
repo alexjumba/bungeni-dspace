@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Digital import of items into DSpace (Web Service) API test</title>
+</head>
+<body>
+<form action="http://192.168.0.70:8080/jspui/alternate" method="post" enctype="multipart/form-data">
+<p>
+Paste the following sample Dublin Core Metadata into the edit box. You may make modifications as you see fit.<br />
+<code>
+&lt;dublin_core&gt;<br />
+&nbsp;&nbsp;&nbsp;&lt;dcvalue element="title" qualifier="none"&gt;DSpace Batch Ingest&lt;/dcvalue&gt;<br />
+&nbsp;&nbsp;&nbsp;&lt;dcvalue element="contributor" qualifier="author"&gt;Kim, Sarah&lt;/dcvalue&gt;<br />
+&nbsp;&nbsp;&nbsp;&lt;dcvalue element="description" qualifier="abstract"&gt;This is a Power Point about how to prepare items for DSpace batch ingest created for Dr. Galloway's class, Problems in Permanent Retention of Electronic Records, Spring 2008.&lt;/dcvalue&gt;<br />
+&nbsp;&nbsp;&nbsp;&lt;dcvalue element="subject" qualifier="none"&gt;Digital Preservation&lt;/dcvalue&gt;<br />
+&nbsp;&nbsp;&nbsp;&lt;dcvalue element="date" qualifier="created"&gt;2008-03-21&lt;/dcvalue&gt;<br />
+&nbsp;&nbsp;&nbsp;&lt;dcvalue element="language" qualifier="iso"&gt;en_US&lt;/dcvalue&gt;<br />
+&lt;/dublin_core&gt;<br />
+
+</dublin_core> 
+</code>
+</p><br />
+<textarea name="dublin_core" style="height: 500px; width: 1000px;"></textarea><br />
+<p>Enter the collection to insert into. The collections are identified by a handle (like a unique id), these collections may be pre-defined (eg bills) and the handles can be known beforehand <br />
+Enter the following as a handle:
+<code>123456789/3</code>
+</p>
+<input type="text" name="collection" value=""/><br />
+<p>The ePerson, for authn &amp; authz
+Enter <code>alex@parliaments.info</code></p>
+<input type="text" name="eperson" value=""/><br />
+<p>The files to upload (bitstreams). The names of the form controls (if thru form) is irrelevant. We can detect that it is a bit sequence.</p>
+<input type="file" name="bitstream"/>
+<input type="submit" value="Import"/>
+</form>
+
+</body>
+</html>

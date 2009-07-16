@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.20" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 2.5.0.v20090603 Build &lt;2.5.0.v20090617-0630></property>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/blank_report.gif</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <data-sources>
+        <oda-data-source extensionID="org.eclipse.datatools.enablement.oda.xml" name="Data Source" id="43">
+            <text-property name="displayName"></text-property>
+            <property name="FILELIST">http://localhost:8080/crosswalk/bungeni-opensearch?pagesize=100&amp;start=0&amp;field1=ANY&amp;query1=parliament</property>
+        </oda-data-source>
+    </data-sources>
+    <data-sets>
+        <oda-data-set extensionID="org.eclipse.datatools.enablement.oda.xml.dataSet" name="Data Set" id="44">
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">published</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">title</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">summary</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">id</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">xml:lang</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">author</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">h1</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">h2</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">Data Source</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">published</property>
+                    <property name="nativeName">published</property>
+                    <property name="dataType">date</property>
+                    <property name="nativeDataType">91</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">title</property>
+                    <property name="nativeName">title</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">summary</property>
+                    <property name="nativeName">summary</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">id</property>
+                    <property name="nativeName">id</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">xml:lang</property>
+                    <property name="nativeName">xml:lang</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">author</property>
+                    <property name="nativeName">author</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">h1</property>
+                    <property name="nativeName">h1</property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                </structure>
+                <structure>
+                    <property name="position">8</property>
+                    <property name="name">h2</property>
+                    <property name="nativeName">h2</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[table0#-TNAME-#table0#:#[/feed/entry]#:#{published;DATE;/published},{title;STRING;/title},{summary;STRING;/summary},{id;STRING;/id},{xml:lang;STRING;/@xml:lang},{author;STRING;/author},{h1;INT;/content/div/div/dl/h1},{h2;STRING;/content/div/div/dl/h2}#:#<"","http:%%www.w3.org%1999%xhtml";"os","http:%%a9.com%-%spec%opensearch%1.1%">]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>1.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>published</design:name>
+            <design:position>1</design:position>
+            <design:nativeDataTypeCode>91</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>published</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>title</design:name>
+            <design:position>2</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>title</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>summary</design:name>
+            <design:position>3</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>summary</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>id</design:name>
+            <design:position>4</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>id</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>xml:lang</design:name>
+            <design:position>5</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>xml:lang</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>author</design:name>
+            <design:position>6</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>author</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>h1</design:name>
+            <design:position>7</design:position>
+            <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>h1</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>h2</design:name>
+            <design:position>8</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>h2</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>
+]]></xml-property>
+            <list-property name="privateDriverProperties">
+                <ex-property>
+                    <name>MAX_ROW</name>
+                    <value>-1</value>
+                </ex-property>
+                <ex-property>
+                    <name>XML_FILE</name>
+                </ex-property>
+            </list-property>
+        </oda-data-set>
+    </data-sets>
+    <styles>
+        <style name="report" id="4">
+            <property name="fontFamily">"Verdana"</property>
+            <property name="fontSize">10pt</property>
+        </style>
+        <style name="crosstab-cell" id="5">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="crosstab" id="6">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+    </styles>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <property name="type">a4</property>
+            <property name="orientation">landscape</property>
+            <page-footer>
+                <text id="3">
+                    <property name="contentType">html</property>
+                    <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                </text>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <grid id="11">
+            <property name="width">100%</property>
+            <column id="12"/>
+            <column id="13"/>
+            <column id="14"/>
+            <row id="15">
+                <cell id="16"/>
+                <cell id="17"/>
+                <cell id="18"/>
+            </row>
+            <row id="19">
+                <cell id="20">
+                    <property name="colSpan">3</property>
+                    <property name="rowSpan">1</property>
+                    <table id="45">
+                        <property name="width">100%</property>
+                        <property name="dataSet">Data Set</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">published</property>
+                                <expression name="expression">dataSetRow["published"]</expression>
+                                <property name="dataType">date</property>
+                            </structure>
+                            <structure>
+                                <property name="name">title</property>
+                                <expression name="expression">dataSetRow["title"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">summary</property>
+                                <expression name="expression">dataSetRow["summary"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">id</property>
+                                <expression name="expression">dataSetRow["id"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">xml:lang</property>
+                                <expression name="expression">dataSetRow["xml:lang"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">author</property>
+                                <expression name="expression">dataSetRow["author"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">h1</property>
+                                <expression name="expression">dataSetRow["h1"]</expression>
+                                <property name="dataType">integer</property>
+                            </structure>
+                            <structure>
+                                <property name="name">h2</property>
+                                <expression name="expression">dataSetRow["h2"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="58">
+                            <property name="width">1.1782178217821782in</property>
+                        </column>
+                        <column id="59">
+                            <property name="width">0.9900990099009901in</property>
+                        </column>
+                        <column id="72">
+                            <property name="width">0.9702970297029703in</property>
+                        </column>
+                        <column id="68">
+                            <property name="width">1.0198019801980198in</property>
+                        </column>
+                        <column id="64">
+                            <property name="width">2.237623762376238in</property>
+                        </column>
+                        <column id="60">
+                            <property name="width">3.3267326732673266in</property>
+                        </column>
+                        <column id="133">
+                            <property name="width">0.36633663366336633in</property>
+                        </column>
+                        <header>
+                            <row id="46">
+                                <property name="backgroundColor">#4D4D4D</property>
+                                <cell id="47">
+                                    <label id="142">
+                                        <text-property name="text">Parliament</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="48">
+                                    <label id="143">
+                                        <text-property name="text">Collection</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="69">
+                                    <label id="144">
+                                        <text-property name="text">Date Issued</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="65">
+                                    <label id="145">
+                                        <text-property name="text">Author</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="61">
+                                    <label id="146">
+                                        <text-property name="text">Title</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="49">
+                                    <label id="147">
+                                        <text-property name="text">Summary</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="124">
+                                    <label id="148">
+                                        <text-property name="text">Language</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <group id="73">
+                            <property name="groupName">NewTableGroup1</property>
+                            <property name="interval">none</property>
+                            <property name="sortDirection">asc</property>
+                            <expression name="keyExpr">row["h1"]</expression>
+                            <structure name="toc">
+                                <expression name="expressionValue">row["h1"]</expression>
+                            </structure>
+                            <property name="repeatHeader">true</property>
+                            <property name="hideDetail">false</property>
+                            <property name="pageBreakAfter">auto</property>
+                            <property name="pageBreakBefore">auto</property>
+                            <property name="pageBreakInside">auto</property>
+                            <header>
+                                <row id="74">
+                                    <property name="backgroundColor">#CE8A5B</property>
+                                    <cell id="75">
+                                        <grid id="135">
+                                            <column id="136"/>
+                                            <column id="137"/>
+                                            <row id="138">
+                                                <cell id="139">
+                                                    <data id="88">
+                                                        <property name="resultSetColumn">h1</property>
+                                                    </data>
+                                                </cell>
+                                                <cell id="140">
+                                                    <text id="141">
+                                                        <property name="contentType">auto</property>
+                                                        <text-property name="content"><![CDATA[Parliament]]></text-property>
+                                                    </text>
+                                                </cell>
+                                            </row>
+                                        </grid>
+                                    </cell>
+                                    <cell id="76"/>
+                                    <cell id="77"/>
+                                    <cell id="78"/>
+                                    <cell id="79"/>
+                                    <cell id="80"/>
+                                    <cell id="125"/>
+                                </row>
+                            </header>
+                            <footer>
+                                <row id="81">
+                                    <cell id="82"/>
+                                    <cell id="83"/>
+                                    <cell id="84"/>
+                                    <cell id="85"/>
+                                    <cell id="86"/>
+                                    <cell id="87"/>
+                                    <cell id="131"/>
+                                </row>
+                            </footer>
+                        </group>
+                        <group id="89">
+                            <property name="groupName">NewTableGroup2</property>
+                            <property name="interval">none</property>
+                            <property name="sortDirection">asc</property>
+                            <expression name="keyExpr">row["h2"]</expression>
+                            <structure name="toc">
+                                <expression name="expressionValue">row["h2"]</expression>
+                            </structure>
+                            <property name="repeatHeader">true</property>
+                            <property name="hideDetail">false</property>
+                            <property name="pageBreakAfter">auto</property>
+                            <property name="pageBreakBefore">auto</property>
+                            <property name="pageBreakInside">auto</property>
+                            <header>
+                                <row id="90">
+                                    <property name="backgroundColor">#694FC3</property>
+                                    <cell id="91"/>
+                                    <cell id="92">
+                                        <data id="104">
+                                            <property name="resultSetColumn">h2</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="93"/>
+                                    <cell id="94"/>
+                                    <cell id="95"/>
+                                    <cell id="96"/>
+                                    <cell id="126"/>
+                                </row>
+                            </header>
+                            <footer>
+                                <row id="97">
+                                    <cell id="98"/>
+                                    <cell id="99"/>
+                                    <cell id="100"/>
+                                    <cell id="101"/>
+                                    <cell id="102"/>
+                                    <cell id="103"/>
+                                    <cell id="130"/>
+                                </row>
+                            </footer>
+                        </group>
+                        <group id="105">
+                            <property name="groupName">NewTableGroup3</property>
+                            <property name="interval">none</property>
+                            <property name="sortDirection">asc</property>
+                            <expression name="keyExpr">row["published"]</expression>
+                            <structure name="toc">
+                                <expression name="expressionValue">row["published"]</expression>
+                            </structure>
+                            <property name="repeatHeader">true</property>
+                            <property name="hideDetail">false</property>
+                            <property name="pageBreakAfter">auto</property>
+                            <property name="pageBreakBefore">auto</property>
+                            <property name="pageBreakInside">auto</property>
+                            <header>
+                                <row id="106">
+                                    <property name="backgroundColor">#00FF00</property>
+                                    <cell id="107"/>
+                                    <cell id="108"/>
+                                    <cell id="109">
+                                        <data id="120">
+                                            <property name="resultSetColumn">published</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="110"/>
+                                    <cell id="111"/>
+                                    <cell id="112"/>
+                                    <cell id="127"/>
+                                </row>
+                            </header>
+                            <footer>
+                                <row id="113">
+                                    <cell id="114"/>
+                                    <cell id="115"/>
+                                    <cell id="116"/>
+                                    <cell id="117"/>
+                                    <cell id="118"/>
+                                    <cell id="119"/>
+                                    <cell id="129"/>
+                                </row>
+                            </footer>
+                        </group>
+                        <detail>
+                            <row id="50">
+                                <list-property name="highlightRules">
+                                    <structure>
+                                        <property name="operator">eq</property>
+                                        <property name="backgroundColor">#918288</property>
+                                        <expression name="testExpr">row.__rownum % 2</expression>
+                                        <simple-property-list name="value1">
+                                            <value>0</value>
+                                        </simple-property-list>
+                                    </structure>
+                                </list-property>
+                                <cell id="51"/>
+                                <cell id="52"/>
+                                <cell id="70"/>
+                                <cell id="66">
+                                    <text-data id="121">
+                                        <expression name="valueExpr">row["author"]</expression>
+                                        <property name="contentType">html</property>
+                                    </text-data>
+                                </cell>
+                                <cell id="62">
+                                    <text-data id="122">
+                                        <expression name="valueExpr">row["title"]</expression>
+                                        <property name="contentType">html</property>
+                                    </text-data>
+                                </cell>
+                                <cell id="53">
+                                    <text-data id="123">
+                                        <expression name="valueExpr">row["summary"]</expression>
+                                        <property name="contentType">html</property>
+                                    </text-data>
+                                </cell>
+                                <cell id="128">
+                                    <text-data id="134">
+                                        <expression name="valueExpr">row["xml:lang"]</expression>
+                                        <property name="contentType">html</property>
+                                    </text-data>
+                                </cell>
+                            </row>
+                        </detail>
+                        <footer>
+                            <row id="54">
+                                <cell id="55"/>
+                                <cell id="56"/>
+                                <cell id="71"/>
+                                <cell id="67"/>
+                                <cell id="63"/>
+                                <cell id="57"/>
+                                <cell id="132"/>
+                            </row>
+                        </footer>
+                    </table>
+                </cell>
+            </row>
+            <row id="23">
+                <cell id="24"/>
+                <cell id="25"/>
+                <cell id="26"/>
+            </row>
+        </grid>
+    </body>
+</report>

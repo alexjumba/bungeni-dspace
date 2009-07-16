@@ -1,0 +1,94 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title>DSPACE Crosswalk</title>
+	<link rel="stylesheet" type="text/css" href="../../deploy/dev/resources/css/core.css" />
+	<link rel="stylesheet" type="text/css" href="../../assets/css/extjs.css" />
+<link rel="stylesheet" type="text/css" href="../../resources/css/ext-all.css"/>
+
+	
+	
+	<!-- <script type="text/javascript" src="../../assets/js/extjs.js"></script>	-->
+	<script type="text/javascript" src="../../adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../../adapter/jquery/jquery-1.3.1.min.js"></script>
+<!-- <script type="text/javascript" src="../../adapter/jquery/ext-jquery-adapter.js"></script> -->
+	<!-- ENDLIBS -->
+	<script type="text/javascript" src="../../ext-all.js"></script>
+
+<script type="text/javascript" src="TabCloseMenu.js"></script>
+<script type="text/javascript" src="RowExpander.js"></script>
+<script type="text/javascript" src="HistoryClearableComboBox.js"></script>
+<script type="text/javascript" src="SearchField.js"></script>
+<script type="text/javascript" src="grid.advanced.js"></script>
+<script type="text/javascript" src="ColumnNodeUI.js"></script>
+<script type="text/javascript" src="adv-vtypes.js"></script>
+
+
+	<script type="text/javascript" src="../../assets/js/site7b30.js?v=4"></script>
+<link rel="stylesheet" type="text/css" href="forms.css"/>
+<link rel="stylesheet" type="text/css" href="column-tree.css"/>
+
+<style type="text/css">
+  .activity{
+    display: block;
+  }
+a.x-tree-node-anchor{
+  text-align: left;
+  padding: 0px;
+}
+</style>
+
+	</head>
+<body>
+<div id="viewport">
+
+	
+<div id="bd">
+<script type="text/javascript" src="../../assets/js/samples2.js"></script>
+<link rel="stylesheet" type="text/css" href="../../assets/css/sview2.css" />
+
+<h3 style="margin-top:10px;">DSPACE Crosswalk</h3>
+<div id="samples">
+	<div id="samples-cb">
+		<img src="../../s.gif" class="normal-view" title="Full view with descriptions"/>
+		<img src="../../s.gif" class="condensed-view" title="Condensed view" />
+		<img src="../../s.gif" class="mini-view" title="Mini view" />
+	</div>
+	
+    <div id="sample-menu"><div id="sample-menu-inner"></div></div>
+    <div id="sample-box"><div id="rere"></div><div id="sample-box-inner"><div id="rere2"></div>
+	  <div id="addSabbathSchool" class="sample-1" style="padding-left: 1em;">
+	  </div>
+	  <div id="addUnit" style="padding-left: 1em;"><!--display: none; -->
+	  </div>
+	  <div id="sample-2" style="padding-left: 1em;"><!--display: none; -->
+	  </div>
+	  <div id="manageUnits" style="padding-left: 1em;">
+	  </div>
+	  <div id="manageMembers" style="padding-left: 1em;"><!--display: none; -->
+	  </div>
+	  <div id="reports" style="padding-left: 1em;"><!--display: none; -->
+	  </div>
+	</div></div>
+</div>
+
+
+<div style="clear:both"></div>
+</div><!-- end bd -->
+
+<div id="ft">
+	
+	<div class="copy">&copy; 2006-2009 Bungeni, UNDESA</div>
+</div>
+
+</div><!-- end viewport -->
+
+
+
+
+
+
+
+
+</body>
+</html>

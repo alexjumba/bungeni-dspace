@@ -1,0 +1,4 @@
+<plugins>
+	<plugin id="koha" class="org.un.undesa.bungeni.crosswalk.search.KohaPlugin"/>
+	<plugin id="dspace" class="org.un.undesa.bungeni.crosswalk.search.DspacePlugin"/>
+</plugins>
