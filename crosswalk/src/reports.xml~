@@ -1,0 +1,4 @@
+<reports>
+	<report name="Parliament Count" description="Report on Publications per parliament" uri="http://192.168.0.170:8080/report/frameset?__report=reports/parliament_count.rptdesign&amp;__format=pdf"/>
+	<report name="Repository Items" description="Report on Items available in the Repository" uri="http://192.168.0.170:8080/report/frameset?__report=reports/dspaceitems.rptdesign&amp;__format=pdf"/>
+</reports>
