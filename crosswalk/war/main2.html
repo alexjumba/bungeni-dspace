@@ -245,7 +245,19 @@ var hd = new Ext.Panel({
 				width: 200,
 id:'searchsite',
 				emptyText:'Search Site...',
+enableKeyEvents: true,
 				listeners:{
+//keydown: function(field, el){}.
+specialkey: function(field, el){
+if(el.getKey()==Ext.EventObject.ENTER){
+//alert("entered!");
+//Ext.getCmp('searchbutton').fireEvent('click');
+
+search_term = Ext.getCmp("searchsite").getValue();
+var iframe = Ext.getCmp('iframe');
+iframe.getFrame().execScript('updateGrid();');
+}
+},
 					render: function(f){
 						//f.el.on('keydown', filterTree, f, {buffer: 350});
 					}
@@ -277,6 +289,7 @@ if(Ext.getCmp("searchsite").getValue() == ""){
 text:'Search',
                             iconCls:'add',
                 tooltip: 'Search',
+id: 'searchbutton',
                 handler: function(){
 search_term = Ext.getCmp("searchsite").getValue();
 var iframe = Ext.getCmp('iframe');
@@ -796,7 +809,7 @@ alert("success!!");
 <div id="repos">
 <ul>
 <li><a href="javascript:jump('pages/otherrepos.html');">Other Repos</a></li>
-<li><a href="javascript:jump('pages/masinde3.html');">Combination</a></li>
+<li><a href="javascript:jump('pages/combination.html');">Combination</a></li>
 <!-- <li><a href="javascript:jump('acadyr.html');">New Academic Year</a></li> -->
 </ul>
     <!-- <p>Koha</p> -->

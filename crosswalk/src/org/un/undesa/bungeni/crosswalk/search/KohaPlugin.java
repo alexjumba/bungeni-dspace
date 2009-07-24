@@ -46,6 +46,7 @@ public class KohaPlugin implements PluginInterface {
 		query.setStartOffset((query.getStartOffset().equalsIgnoreCase("")==true?"1":query.getStartOffset()));
 		System.out.println("The page size is: "+query.getStartOffset());
 		results.setStartRecord((Integer.valueOf(query.getStartOffset())));
+		results.setPageSize(20);
 		
 		// Create an instance of HttpClient.
 	    HttpClient client = new HttpClient();
@@ -174,13 +175,16 @@ public class KohaPlugin implements PluginInterface {
 			          	switch(code) {
 			          		case 'a':
 			          			rest.setTitle(StringEscapeUtils.escapeXml(data));
+			          			//rest.setTitle("saghj");
 			          			break;
 			          		case 'b':
 			          			
 			          			break;
 			          	}
 	              }
-              }catch(Exception e) {}
+              }catch(Exception e) {
+            	  e.printStackTrace();
+              }
               
               try {
 	              DataField description = (DataField) record.getVariableField("500");
@@ -196,6 +200,7 @@ public class KohaPlugin implements PluginInterface {
 	    		          	switch(code) {
 	    		          		case 'a':
 	    		          			rest.setDescription(StringEscapeUtils.escapeXml(data));
+	    		          			//rest.setDescription("dfghj");
 	    		          			break;
 	    		          		case 'b':
 	    		          			
@@ -203,7 +208,42 @@ public class KohaPlugin implements PluginInterface {
 	    		          	}
 	                  }
 	              }
-              }catch(Exception e) {}
+              }catch(Exception e) {
+            	  e.printStackTrace();
+              }
+              
+              try {
+	              DataField description = (DataField) record.getVariableField("999");
+	              if(description!=null) {
+	            	  List<Subfield> subfields2 = description.getSubfields();
+	                  Iterator i2 = subfields2.iterator();
+	                  while (i2.hasNext()) {
+	                      Subfield subfield = (Subfield) i2.next();
+	    		          	char code = subfield.getCode();
+	    		          	String data = subfield.getData();
+	    		
+	    		          	System.out.println("Subfield code: " + code + " Data element: " + data);
+	    		          	switch(code) {
+	    		          		case 'c':
+	    		          			rest.setUrl(data);//.setDescription(StringEscapeUtils.escapeXml(data));
+	    		          			//rest.setDescription("dfghj");
+	    		          			break;
+	    		          		case 'd':
+	    		          			rest.setUrl(data);
+	    		          			break;
+	    		          	}
+	    		          	System.out.println("\n\nkohaid:" + rest.getUrl());
+	                  }
+	              }
+              }catch(Exception e) {
+            	  e.printStackTrace();
+              }
+              
+              
+              if(rest.getDescription() == null)rest.setDescription(rest.getTitle());
+              rest.setBitstreams("NONE");
+              rest.setCollection("koha");
+              rest.setLanguage("en");
               
               
               try {
@@ -226,7 +266,12 @@ public class KohaPlugin implements PluginInterface {
 	    		          		case 'c':
 	    		          			System.out.println("\ndatefield"+data);
 	    		          			String date = data;
+	    		          			
+	    		          			System.out.println("\n\nlastindexoof:"+date.lastIndexOf(".")+":");
+	    		          			if(date.lastIndexOf(".") != -1)
 	    	            			date = date.substring(0, date.lastIndexOf("."));
+	    	            			
+	    	            			System.out.println("\n\ndaaate:"+date);
 	    	            			Calendar cdr = Calendar.getInstance();
 	    	            			cdr.set(Integer.valueOf(date), 1, 1);
 	    		          			rest.setIssue_date(cdr.getTime());
@@ -272,11 +317,35 @@ public class KohaPlugin implements PluginInterface {
 			          	}
 	              }
               }catch(Exception ex) {
-            	  
+            	  ex.printStackTrace();
+              }
+              
+              if(rest.getAuthor()==null){
+            	  try {
+    	              DataField authors = (DataField) record.getVariableField("110");
+    	              List subfields4 = authors.getSubfields();
+    	              Iterator i4 = subfields4.iterator();
+    	              while (i4.hasNext()) {
+    	                  Subfield subfield = (Subfield) i4.next();
+    			          	char code = subfield.getCode();
+    			          	String data = subfield.getData();
+    			
+    			          	System.out.println("Subfield code: " + code + " Data element: " + data);
+    			          	switch(code) {
+    			          		case 'a':
+    			          			rest.setAuthor(data);
+    			          			break;
+    			          		case 'b':		          			
+    			          			break;
+    			          	}
+    	              }
+                  }catch(Exception ex) {
+                	  ex.printStackTrace();
+                  }
               }
               //rest.setAuthor(" ");
               System.out.println("\n\n\n\n\n > adding rest" +rest.getDescription());
-              if(rest.getUrl()==null)rest.setUrl("null");
+              //if(rest.getUrl()==null)rest.setUrl("null");
               res.add(rest);
               workaround++;
 
@@ -307,6 +376,7 @@ public class KohaPlugin implements PluginInterface {
 	  		  results.setMaxPages(0);
 	  		  //ex.printStackTrace();
 	  	  }
+	  	  /**/results.setMaxPages(0);
 	  	  System.out.println("\n\nafter all tries");
 	    
 	    try{

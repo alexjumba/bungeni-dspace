@@ -54,6 +54,11 @@
     .nav {
         background-image:url(kit/examples/shared/icons/fam/folder_go.png);
     }
+
+.x-tree .x-panel-body {
+background-image:url(images/watermark.jpg);
+}
+
 	.icon-ob{
 	    background-image: url('kit/misc/disk.png');
 	    height: 1em;
@@ -240,7 +245,15 @@ var hd = new Ext.Panel({
 				width: 200,
 id:'searchsite',
 				emptyText:'Search Site...',
+enableKeyEvents: true,
 				listeners:{
+//keydown: function(field, el){}.
+specialkey: function(field, el){
+if(el.getKey()==Ext.EventObject.ENTER){
+alert("entered!");
+Ext.getCmp('searchbutton').fireEvent('click');
+}
+},
 					render: function(f){
 						//f.el.on('keydown', filterTree, f, {buffer: 350});
 					}
@@ -272,6 +285,7 @@ if(Ext.getCmp("searchsite").getValue() == ""){
 text:'Search',
                             iconCls:'add',
                 tooltip: 'Search',
+id: 'searchbutton',
                 handler: function(){
 search_term = Ext.getCmp("searchsite").getValue();
 var iframe = Ext.getCmp('iframe');
@@ -791,7 +805,7 @@ alert("success!!");
 <div id="repos">
 <ul>
 <li><a href="javascript:jump('pages/otherrepos.html');">Other Repos</a></li>
-<li><a href="javascript:jump('pages/masinde3.html');">Combination</a></li>
+<li><a href="javascript:jump('pages/combination.html');">Combination</a></li>
 <!-- <li><a href="javascript:jump('acadyr.html');">New Academic Year</a></li> -->
 </ul>
     <!-- <p>Koha</p> -->

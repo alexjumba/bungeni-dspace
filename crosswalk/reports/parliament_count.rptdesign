@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.20" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 2.5.0.v20090520 Build &lt;2.5.0.v20090526-0630></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 2.5.0.v20090603 Build &lt;2.5.0.v20090617-0630></property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.datatools.enablement.oda.xml" name="dspace" id="7">
-            <text-property name="displayName"></text-property>
-            <property name="FILELIST">http://localhost:8080/crosswalk/bungeni-opensearch-statistics</property>
+            <property name="FILELIST">http://192.168.0.70:8080/crosswalk/bungeni-opensearch-statistics</property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -107,8 +106,7 @@
       </design:resultSetColumns>
     </design:resultSetDefinitions>
   </design:ResultSets>
-</model:DesignValues>
-]]></xml-property>
+</model:DesignValues>]]></xml-property>
             <list-property name="privateDriverProperties">
                 <ex-property>
                     <name>MAX_ROW</name>

@@ -39,7 +39,6 @@
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/htmlparser-1.0.5.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/jaxen-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/jaxen-1.1-beta-7.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/json-lib-2.2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/json-lib-ext-spring-1.0.2.jar"/>
@@ -56,13 +55,12 @@
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/xstream-1.3.1.jar"/>
 	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/xwork-2.1.1.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/spring.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-aop.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-beans.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-context.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-context-support.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-core.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-web.jar"/>
-	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/distrib/modules/spring-webmvc.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring-security-acl-2.0.4.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring-security-core-2.0.4.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring-security-taglibs-2.0.4.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring-aspects.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring-tomcat-weaver.jar"/>
+	<classpathentry kind="lib" path="/home/alex/Development/eclipse-workspaces/birt-workspace/crosswalk/lib/struts/spring-webmvc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

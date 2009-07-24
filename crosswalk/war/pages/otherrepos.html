@@ -110,11 +110,11 @@ Ext.QuickTips.init();
     var expander = new Ext.grid.RowExpander({
         tpl : new Ext.Template(
 '<div style="float:left;">',
-            '<img title="{title}" style="padding-right: 20px; width: 120px; height: 120px;" type="{url}" class="koha" src="../images/categories/koha.jpg" alt="{title}"/>',
+            '<img title="{title}" style="padding-right: 20px; width: 120px; height: 120px;" class="koha" src="../images/categories/{collection}.jpg" alt="{title}"/>',
 '</div><div style="/*float: left;*/ padding-left: 1em;">',
             '<p><b>Title:</b> {title}</p><br>',
             '<p><b>'+'description'+': '+':</b> {description}</p>',
-            //'<p><b>Bitstreams [File(s)]:</b></p><br />{bitstreams}',
+            '<p><b>Bitstreams [File(s)]:</b></p><br />{bitstreams}',
 '</div><br style="clear: both;"/>'
         )
     });
@@ -178,8 +178,8 @@ var sm2 = new Ext.grid.SmartCheckboxSelectionModel({
             {name: 'author', type: 'string'},
             {name: 'title', type: 'string'},
             {name: 'url', type: 'string'},
-            //{name: 'bitstreams', type: 'string'},
-            //{name: 'collection', type: 'string'},
+            {name: 'bitstreams', type: 'string'},
+            {name: 'collection', type: 'string'},
             {name: 'description', type: 'string', mapping: 'details'}
         ],
       //init order by status
@@ -268,13 +268,13 @@ Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start
 							//	initialload=false;
 							//	////console.info(options, handle);
 							
-var lyos = '';
+/*var lyos = '';
 var lcode = '';
 try{
 lyos = parent.yos;
 lcode=parent.code;							
-}catch(e){}
-								Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ loc: lyos, code: lcode } );
+}catch(e){}*/
+								////Ext.apply(options.params, {/*wb: wbSelect2.getValue()*//*start: obj.params.start,*/ loc: lyos, code: lcode } );
 				      		//}else{
 				      		//	////console.info(options, handle);
 							//	Ext.apply(options.params, {/*wb: wbSelect2.getValue()*/start: obj.params.start, loc: handle } );
@@ -290,7 +290,7 @@ lcode=parent.code;
 		
 		});
 		// set the default sorting for the corresponding sql query
-		media_store.setDefaultSort('id', 'DESC');
+		//media_store.setDefaultSort('id', 'DESC');
 		media_store.load();
 
 
@@ -434,7 +434,7 @@ var mediaGrid_cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer({header:'No'/*,width:20*/}),
         expander,        
         {id:'id', header: 'id', dataIndex: 'id', hidden: true },
-    	{id:'issue_date', header: 'dateIssued', dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('M d Y'), locked:false, sortable: true, tooltip:'Date of issue', filter: {/*xtype:"textfield",*/ xtype: "daterangefield", width: 70,
+    	{id:'issue_date', header: parent.dateIssued, dataIndex: 'issue_date', width: 80, renderer: Ext.util.Format.dateRenderer('M d Y'), locked:false, sortable: true, tooltip:'Date of issue', filter: {/*xtype:"textfield",*/ xtype: "daterangefield", width: 70,
 			filterEncoder: function(value)
 			{
 				//return Ext.ux.form.DateRangeField.periodToExpr(value, "YmdHis");
@@ -460,9 +460,9 @@ if(value.begin == "" && value.end == ""){
 				return value;
 			}
 , filterName: 'dop', id:'date_issue'/*, width: 50*/, allowBlank: true} },
-        {id:'author', header: 'author', dataIndex: 'author', /*width: 120,*/ sortable: true, filter: {xtype:"textfield", filterName:"author", selectOnFocus:true, id:'author_field'/*, width: 100*/, width: 'auto'}, tooltip: 'the author(s) of the item'},
-        {id:'title', header: 'title', dataIndex: 'title', /*width: 210,*/ sortable: true, filter: {xtype:"textfield", filterName: "title", selectOnFocus:true, id:'title_field'/*, width: 160*/, width: 'auto'}, tooltip: 'the title of the item'},
-        {id:'description', header: 'description', dataIndex: 'description'/*, width: 180*/, sortable: true, tooltip:'the description of the item',
+        {id:'author', header: parent.author, dataIndex: 'author', /*width: 120,*/ sortable: true, filter: {xtype:"textfield", filterName:"author", selectOnFocus:true, id:'author_field'/*, width: 100*/, width: 'auto'}, tooltip: 'the author(s) of the item'},
+        {id:'title', header: parent.title, dataIndex: 'title', /*width: 210,*/ sortable: true, filter: {xtype:"textfield", filterName: "title", selectOnFocus:true, id:'title_field'/*, width: 160*/, width: 'auto'}, tooltip: 'the title of the item'},
+        {id:'description', header: parent.description, dataIndex: 'description'/*, width: 180*/, sortable: true, tooltip:'the description of the item',
             /*filter: {
 	            xtype: "combo",
 	            mode: "local",
@@ -472,7 +472,7 @@ if(value.begin == "" && value.end == ""){
         	filter: {xtype:"textfield", filterName: "description", selectOnFocus:true, id:'description_field', width: 'auto'/*, width: 160*/}        
         },actions
      ]);
-mediaGrid_cm.defaultSortable = true;  
+mediaGrid_cm.defaultSortable = true; 
 
 
 // defining the grid
@@ -612,7 +612,7 @@ var tpll = new Ext.XTemplate(
             	'<div><h2><div unselectable="on">Search Description</div></h2>',
 	            	'<dl>',
 		                '<tpl for=".">',
-		                    '<dd ext:url="{url}"><img title="{title}" type="{url}" class="{collection}" src="../images/categories/{collection}.jpg" alt="{title}"/>',
+		                    '<dd ext:url="{url}"><img title="{title}" class="koha" src="../images/categories/{collection}.jpg" alt="{title}"/>',
 		                        '<div><h4>{author}</h4><p>{title}</p><p>{issue_date:date("M d Y")}</p></div>',
 		                    '</dd>',
 		                '</tpl>',
@@ -741,6 +741,7 @@ resizeTabs:true, // turn on tab resizing
                 })
 /*)*/]});
 
+media_grid.fireEvent("afterrender");
 
 ct = Ext.get('datview');
 		ct.on('mouseover', function(e, t){

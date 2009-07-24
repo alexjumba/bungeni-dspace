@@ -406,7 +406,7 @@ public class SearchController implements ResourceLoaderAware {
 	  				//Iterate the libraries and performing searches on compatible families
 	  				Iterator<String> url = repositories.iterator(type);
 //int ii = 0;
-//	  				while(url.hasNext()) {
+	  				while(url.hasNext()) {
 //System.out.println("\n\n"+ii);
 //ii++;
 //	  					String repoUrl = (String) url.next();
@@ -469,11 +469,12 @@ ii++;
 		  				sr = unify(sr, localResults);
 		  				System.out.println("\n\nSearchResults returned");
 
-	  				
+	  				}//while
 	  			}catch(Exception ex) {
 	  				System.out.println("\n\nOops, an error occured!");
 	  				ex.printStackTrace();
-	  			}	  			
+	  			}		  			
+	  			
 	  		}else {
 	  			//print that we do not have a compatible plugin in that family and die
 	  			System.out.println("\nSorry, there's no compatible plugin available.");return null;
@@ -525,6 +526,8 @@ ii++;
 	  	//String jsonResult = new flexjson.JSONSerializer().serialize(sr);
 	  	String jsonResult =  new flexjson.JSONSerializer().transform(new DateTransformer("yyyy/MM/dd"),"searchResults.issue_date").exclude("*.class").include("searchResults")/*.exclude("searchResults.bitstream")*//*.exclude("class")*/.serialize(sr); // send the entire graph starting at person 
 	  	
+	  	/*jsonResult = "{\"maxPages\":0,\"maxResults\":31,\"pageSize\":20,\"searchDescription\":\"Search Results\",\"searchResults\":[{\"abstract\":null,\"author\":\"CKRC.\",\"bitstreams\":\"NONE\",\"citation\":null,\"collection\":\"koha\",\"defaults\":null,\"description\":\"saghj\",\"details\":\"saghj\",\"hitNumber\":null,\"issue_date\":\"2002/02/01\",\"language\":\"en\",\"publisher\":\"CKRC,\",\"score\":null,\"sponsor\":null,\"title\":\"saghj\",\"uri\":\"book.jpg\",\"url\":\"koha:http://url:http://192.168.0.70:11001/biblios\"},{\"abstract\":null,\"author\":\"CKRC.\",\"bitstreams\":\"NONE\",\"citation\":null,\"collection\":\"koha\",\"defaults\":null,\"description\":\"saghj\",\"details\":\"saghj\",\"hitNumber\":null,\"issue_date\":\"2002/02/01\",\"language\":\"en\",\"publisher\":\"CKRC,\",\"score\":null,\"sponsor\":null,\"title\":\"saghj\",\"uri\":\"book.jpg\",\"url\":\"koha:http://url:http://192.168.0.70:11001/biblioslklo\"}, {\"abstract\":null,\"author\":\"CKRC.\",\"bitstreams\":\"NONE\",\"citation\":null,\"collection\":\"koha\",\"defaults\":null,\"description\":\"saghj\",\"details\":\"saghj\",\"hitNumber\":null,\"issue_date\":\"2002/02/01\",\"language\":\"en\",\"publisher\":\"CKRC,\",\"score\":null,\"sponsor\":null,\"title\":\"saghj\",\"uri\":\"book.jpg\",\"url\":\"koha:http://url:http://192.168.0.70:11001/bibliosjnjknkjnkj\"}" +
+	  			"],\"searchTerms\":\"bill\",\"startRecord\":0}";*/
 	  	System.out.println("json is:"+jsonResult/*test*/);
 	  	response.setContentType("text/javascript;charset=utf-8");
 	  	response.setCharacterEncoding("UTF-8");
@@ -676,6 +679,7 @@ ii++;
 		int count = 0;
 		String newUrl = "";
 		String handle = "";
+		boolean koha =false; 
 		while(st.hasMoreTokens()) {
 			String str = st.nextToken();
 			if(count==2) {
@@ -683,7 +687,7 @@ ii++;
 			}else if(count == 1) {
 				handle=str;
 			}else if(count == 0) {
-				if(!str.equalsIgnoreCase("dspace")) {return null;}
+				if(str.equalsIgnoreCase("koha")) {koha=true;}else if(!str.equalsIgnoreCase("dspace")) {return null;}
 			}else if(count == 3) {
 				newUrl = newUrl + ":" +str;
 			}else if(count == 4) {
@@ -691,9 +695,17 @@ ii++;
 			}
 			count++;
 		}
-		String result = newUrl+"/handle/"+handle;
-		System.out.println("\n\n:"+result);
-	  	mp.put("url", result);	  	
+		if(koha) {
+			int idx = newUrl.lastIndexOf(":");
+			String result = newUrl.substring(0, idx)+"/cgi-bin/koha/catalogue/detail.pl?biblionumber="+handle;
+			System.out.println("\n\n:"+result);
+		  	mp.put("url", result);
+		}else {
+			String result = newUrl+"/handle/"+handle;
+			System.out.println("\n\n:"+result);
+		  	mp.put("url", result);
+		}
+			  	
 	  	return new ModelMap("result",mp);
 	}
 	
@@ -883,6 +895,93 @@ ii++;
 	  	
 	  	System.out.println("json is:"+result);
 	  	response.setContentType("application/json;charset=utf-8");
+	  	response.setCharacterEncoding("UTF-8");
+	  	try {
+			response.getWriter().write(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value="/auth.do")
+	public void auth(HttpServletResponse response, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password){
+		if(username==null){
+			username="";
+		}
+		if(password==null){
+			password = "";
+		}
+		System.out.println("Username: "+username+" Password: "+password);
+		
+		String result = "ticket";
+	  	response.setContentType("text/plain;charset=utf-8");
+	  	response.setCharacterEncoding("UTF-8");
+	  	try {
+			response.getWriter().write(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value="/authtoken.do")
+	public void authtoken(HttpServletResponse response, @RequestParam(value = "token", required = false) String token){
+		if(token==null){
+			return;
+		}
+		System.out.println("Token: "+token);
+		
+		if(!token.equalsIgnoreCase("1234567890") || !token.equalsIgnoreCase("qwertyuiop")) {
+			return;
+		}
+		
+		response.setHeader("username", token);
+		response.setHeader("group", "bungeni");
+		response.setHeader("fname", "mp");
+		response.setHeader("lname", "nairobi");
+		response.setHeader("email", "email");
+		response.setHeader("phone", "0754321232");
+		
+		String result = "ticket";
+	  	response.setContentType("text/plain;charset=utf-8");
+	  	response.setCharacterEncoding("UTF-8");
+	  	try {
+			response.getWriter().write(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value="/otherrepos.do")
+	public void otherrepos(HttpServletResponse response){
+		Resource repository = this.resourceLoader.getResource(this.repositoriesLocation);
+		SAXBuilder saxBuilder2 = new SAXBuilder("org.apache.xerces.parsers.SAXParser");		
+	  	List<String> families = new ArrayList<String>();
+		try {
+			org.jdom.Document jdomDocument = saxBuilder2.build(repository.getInputStream());
+			org.jdom.Element el = jdomDocument.getRootElement();
+			List<org.jdom.Element> allChildren = el.getChildren();
+			for(int i=0;i<allChildren.size();i++) {
+				org.jdom.Element element = (org.jdom.Element)allChildren.get(i);
+				families.add(element.getAttributeValue("family"));
+			}
+	  	}catch(Exception ex) {
+	  		ex.printStackTrace();
+	  	}
+	  	
+	  	boolean start = true;
+		String result = "{families:[";
+		for(String fam: families) {
+			if(start) {
+				result += "{family: \""+fam+"\"}";
+			}else {
+				result += ",{family: \""+fam+"\"}";
+			}
+		}
+		result +="]}";
+	  	response.setContentType("application/javascript;charset=utf-8");
 	  	response.setCharacterEncoding("UTF-8");
 	  	try {
 			response.getWriter().write(result);

@@ -1,6 +1,7 @@
 <repositories>
 	<!-- <repository url="http://localhost:8080/jspui" family="dspace"/>
 	<repository url="http://localhost:8080/jspui" family="dspace"/> -->
-	<repository url="http://127.0.0.1:8080/crosswalk" family="dspace" default="true"/>
-	<repository url="http://127.0.0.1:11001/biblios" family="koha"/>
+	<repository url="http://192.168.0.70:8080/crosswalk" family="dspace" default="true"/>
+	<repository url="http://192.168.0.70:8080/crosswalk" family="dspace"/>
+	<repository url="http://192.168.0.70:11001/biblios" family="koha"/>
 </repositories>
